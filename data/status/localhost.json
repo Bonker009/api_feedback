@@ -1,0 +1,50 @@
+[
+  {
+    "path": "/api/v1/create-resume",
+    "method": "post",
+    "working": false,
+    "notes": ""
+  },
+  {
+    "path": "/api/v1/code-challenge",
+    "method": "post",
+    "working": false,
+    "notes": "- the request should not have created at \n- when use the sample request, it works normal\n- should trim all the field for heading space and tailing space\n- can post when test case is empty\n- Missing input or expectedOutput inside testCase\n- Negative or Non-sensible Scores\n- i can post unknown programming language\n- "
+  },
+  {
+    "path": "/api/v1/code-challenge/{codeId}",
+    "method": "get",
+    "working": false,
+    "notes": "- when code challenge not found, return 200 with no payload\n- when using wrong uuid format, get 500 instead of 400 bad request\n- not validate uuid format "
+  },
+  {
+    "path": "/api/v1/code-challenge",
+    "method": "get",
+    "working": true,
+    "notes": ""
+  },
+  {
+    "path": "/api/v1/code-challenge/{codeId}",
+    "method": "put",
+    "working": false,
+    "notes": "- Caused by: org.apache.ibatis.reflection.ReflectionException: There is no getter for property named 'problemDetail' in 'class com.kshrd.devconnect_springboot.model.dto.request.CodeChallengeRequest'"
+  },
+  {
+    "path": "/api/v1/code-challenge/{codeId}",
+    "method": "delete",
+    "working": false,
+    "notes": "- when i delete unexisted "
+  },
+  {
+    "path": "/api/v1/auths/login",
+    "method": "post",
+    "working": false,
+    "notes": ""
+  },
+  {
+    "path": "/api/v1/hackathons",
+    "method": "post",
+    "working": false,
+    "notes": "- The same request is invalid (date). Check if it needs zone or not\n-"
+  }
+]

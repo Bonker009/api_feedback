@@ -1,0 +1,23 @@
+{
+  "expandedControllers": {
+    "resume-controller": true,
+    "topic-controller": true,
+    "recruiter-controller": true,
+    "project-controller": true,
+    "profile-controller": true,
+    "join-job-controller": true,
+    "jobs-controller": true,
+    "hackathon-controller": true,
+    "comments-controller": true,
+    "code-challenge-controller": true,
+    "developer-profiles-controller": true,
+    "upvote-controller": true,
+    "submission-controller": true,
+    "file-controller": true,
+    "bookmark-controller": true,
+    "auth-controller": true,
+    "skill-controller": true,
+    "position-controller": true,
+    "badge-controller": true
+  }
+}
