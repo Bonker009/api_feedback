@@ -73,6 +73,7 @@ export interface ResponseViewerProps {
   responseBody: string;
   responseHeaders: Record<string, string>;
   copyToClipboard: (text: string) => void;
+  getStatusBadgeColor?: (status: number) => string;
 }
 
 export interface AuthManagerProps {
