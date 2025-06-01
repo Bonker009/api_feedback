@@ -70,8 +70,8 @@ export function Header({
               </Button>
             </Link>
           )} */}
-          {pathname !== "/documentation/database-schema" && (
-            <Link href="/documentation/database-schema">
+          {pathname !== "/database-schema" && (
+            <Link href="/database-schema">
               <Button
                 variant="outline"
                 className="flex items-center gap-2 border-blue-200 text-blue-700 hover:bg-blue-50 transition"
