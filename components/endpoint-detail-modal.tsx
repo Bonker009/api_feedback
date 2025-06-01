@@ -263,31 +263,35 @@ export function EndpointDetailModal({
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100">
-                          {methodData.parameters.map((param: any, i: number) => (
-                            <tr key={i} className="hover:bg-gray-50">
-                              <td className="px-4 py-2 text-sm font-medium">
-                                {param.name}
-                              </td>
-                              <td className="px-4 py-2 text-sm">{param.in}</td>
-                              <td className="px-4 py-2 text-sm">
-                                {param.schema?.type ||
-                                  param.schema?.$ref?.split("/").pop() ||
-                                  "-"}
-                              </td>
-                              <td className="px-4 py-2 text-sm">
-                                {param.required ? (
-                                  <span className="text-green-600 font-semibold">
-                                    Yes
-                                  </span>
-                                ) : (
-                                  <span className="text-gray-400">No</span>
-                                )}
-                              </td>
-                              <td className="px-4 py-2 text-sm">
-                                {param.description || "-"}
-                              </td>
-                            </tr>
-                          ))}
+                          {methodData.parameters.map(
+                            (param: any, i: number) => (
+                              <tr key={i} className="hover:bg-gray-50">
+                                <td className="px-4 py-2 text-sm font-medium">
+                                  {param.name}
+                                </td>
+                                <td className="px-4 py-2 text-sm">
+                                  {param.in}
+                                </td>
+                                <td className="px-4 py-2 text-sm">
+                                  {param.schema?.type ||
+                                    param.schema?.$ref?.split("/").pop() ||
+                                    "-"}
+                                </td>
+                                <td className="px-4 py-2 text-sm">
+                                  {param.required ? (
+                                    <span className="text-green-600 font-semibold">
+                                      Yes
+                                    </span>
+                                  ) : (
+                                    <span className="text-gray-400">No</span>
+                                  )}
+                                </td>
+                                <td className="px-4 py-2 text-sm">
+                                  {param.description || "-"}
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -311,11 +315,14 @@ export function EndpointDetailModal({
                         (contentType) => (
                           <div key={contentType} className="mb-2">
                             <span className="font-medium">{contentType}</span>
-                            {methodData.requestBody.content[contentType].schema && (
+                            {methodData.requestBody.content[contentType]
+                              .schema && (
                               <div className="ml-4 text-sm">
                                 Schema:{" "}
                                 <code className="bg-gray-100 px-1 py-0.5 rounded">
-                                  {methodData.requestBody.content[contentType].schema.$ref
+                                  {methodData.requestBody.content[
+                                    contentType
+                                  ].schema.$ref
                                     ?.split("/")
                                     .pop() || "Schema"}
                                 </code>
@@ -325,7 +332,9 @@ export function EndpointDetailModal({
                         )
                       )}
                       {methodData.requestBody.required && (
-                        <div className="text-red-500 text-sm mt-1">Required</div>
+                        <div className="text-red-500 text-sm mt-1">
+                          Required
+                        </div>
                       )}
                     </div>
                   ) : (
@@ -380,7 +389,9 @@ export function EndpointDetailModal({
                                   ? Object.values(response.content).map(
                                       (content: any, i: number) => (
                                         <div key={i}>
-                                          {content.schema?.$ref?.split("/").pop() ||
+                                          {content.schema?.$ref
+                                            ?.split("/")
+                                            .pop() ||
                                             content.schema?.type ||
                                             "-"}
                                         </div>

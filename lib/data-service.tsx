@@ -92,3 +92,8 @@ export async function listSpecs() {
     return [];
   }
 }
+
+
+export async function deleteSpec(id: string) {
+  return deleteData("spec", id);
+}

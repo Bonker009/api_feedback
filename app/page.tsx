@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Header } from "@/components/header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { listSpecs } from "@/lib/data-service";
+import { listSpecs, deleteSpec } from "@/lib/data-service";
 import { FileText, Plus, Upload, BarChart } from "lucide-react";
 
 type ApiSpec = {
@@ -41,6 +41,17 @@ export default function Home() {
 
     loadSpecs();
   }, []);
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this API specification?")) {
+      try {
+        await deleteSpec(id);
+        setSpecs((prev) => prev.filter((spec) => spec.id !== id));
+      } catch (error) {
+        alert("Failed to delete specification.");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -89,6 +100,14 @@ export default function Home() {
                               View Docs
                             </Button>
                           </Link>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-red-300 text-red-500 hover:bg-red-50"
+                            onClick={() => handleDelete(spec.id)}
+                          >
+                            Delete
+                          </Button>
                         </div>
                       </div>
                     </div>
