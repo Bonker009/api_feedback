@@ -121,4 +121,5 @@ export interface BulkImportDialogProps {
   setBulkImportText: (text: string) => void;
   bulkImportError: string;
   handleBulkImport: () => void;
+  requestBody: string;
 }

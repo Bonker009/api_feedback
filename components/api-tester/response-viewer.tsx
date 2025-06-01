@@ -1,6 +1,7 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useState, useEffect, useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -39,52 +40,53 @@ export function ResponseViewer({
   responseTime,
   responseBody,
   responseHeaders,
-  copyToClipboard,
   getStatusBadgeColor,
+  copyToClipboard,
 }: ResponseViewerProps) {
   const [expanded, setExpanded] = useState(true);
   const [copied, setCopied] = useState<string | null>(null);
-  const [formattedBody, setFormattedBody] = useState<string>(responseBody);
   const [isJsonView, setIsJsonView] = useState<boolean>(true);
   const [highlightedBody, setHighlightedBody] = useState<string>("");
   const [responseSize, setResponseSize] = useState<number>(0);
-  console.log("responseBody", responseBody);
+
+  const formattedBody = useMemo(() => {
+    if (!responseBody) return "";
+    try {
+      return typeof responseBody === "string"
+        ? responseBody
+        : JSON.stringify(responseBody, null, 2);
+    } catch (e) {
+      return responseBody.toString();
+    }
+  }, [responseBody]);
+
   useEffect(() => {
     try {
       if (responseBody) {
-        // Calculate response size
         setResponseSize(new Blob([responseBody]).size);
 
-        // Detect if the response is JSON
         if (
           responseBody.trim().startsWith("{") ||
           responseBody.trim().startsWith("[")
         ) {
           const parsed = JSON.parse(responseBody);
           const formatted = JSON.stringify(parsed, null, 2);
-          setFormattedBody(formatted);
-          setIsJsonView(true);
-
-          // Simple syntax highlighting
           setHighlightedBody(formatted);
+          setIsJsonView(true);
         } else {
-          setFormattedBody(responseBody);
-          setIsJsonView(false);
           setHighlightedBody(responseBody);
+          setIsJsonView(false);
         }
       } else {
-        setFormattedBody("");
         setHighlightedBody("");
         setResponseSize(0);
       }
     } catch (e) {
-      setFormattedBody(responseBody || "");
-      setIsJsonView(false);
       setHighlightedBody(responseBody || "");
+      setIsJsonView(false);
     }
   }, [responseBody]);
 
-  // Handle copy with feedback
   const handleCopy = (text: string, type: string) => {
     copyToClipboard(text);
     setCopied(type);
@@ -340,26 +342,22 @@ export function ResponseViewer({
                   </div>
 
                   <div className="bg-slate-50 border rounded-md overflow-hidden">
-                    {formattedBody ? (
-                      <div className="p-4 overflow-x-auto text-sm h-[350px] font-mono text-slate-800">
-                        {isJsonView ? (
-                          <pre className="whitespace-pre language-json">
-                            {highlightedBody}
-                          </pre>
-                        ) : (
-                          <pre className="whitespace-pre">{formattedBody}</pre>
-                        )}
-                      </div>
+                    {isJsonView ? (
+                      <SyntaxHighlighter
+                        language="json"
+                        style={oneLight}
+                        customStyle={{
+                          background: "transparent",
+                          fontSize: "0.95em",
+                          margin: 0,
+                          padding: 0,
+                          minHeight: "100%",
+                        }}
+                      >
+                        {highlightedBody}
+                      </SyntaxHighlighter>
                     ) : (
-                      <div className="p-4 flex flex-col items-center justify-center h-[350px] text-slate-500">
-                        <Info className="h-12 w-12 mb-3 text-slate-300" />
-                        <p className="text-center font-medium">
-                          No response yet
-                        </p>
-                        <p className="text-center text-sm mt-1">
-                          Send a request to see the response data
-                        </p>
-                      </div>
+                      <pre className="whitespace-pre">{formattedBody}</pre>
                     )}
                   </div>
                 </div>

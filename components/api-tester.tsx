@@ -128,7 +128,7 @@ export function ApiTester({
       // your are here
       console.log("Here here", url, requestOptions);
       const response = await FetchTester(url, requestOptions);
-
+      console.log("Response received:", response);
       if (response.data !== null) {
         const formattedData =
           typeof response.data === "object"
@@ -275,52 +275,60 @@ export function ApiTester({
   console.log("Active test result:", activeResult);
   console.log("Testcases:", testCases);
 
-  return (
-    <div className="space-y-4">
-      <AuthManager
-        authOptions={authOptions}
-        activeAuthOption={activeAuthOption}
-        setActiveAuthOption={setActiveAuthOption}
-        requestHeaders={requestHeaders}
-        setRequestHeaders={setRequestHeaders}
-        saveAuthOptions={(options) => {
-          setAuthOptions(options);
-          localStorage.setItem(
-            "api_tester_auth_options",
-            JSON.stringify(options)
-          );
-        }}
-      />
+  // Extract parameters from apiData
+  const parameters = apiData.paths[path][method.toLowerCase()].parameters || [];
 
-      {/* Test Case Manager */}
-      <TestCaseManager
-        testCases={testCases}
-        setTestCases={setTestCases}
-        form={form}
-        requestHeaders={requestHeaders}
-        requestBody={requestBody}
-        method={method}
-        bulkImportText={bulkImportText}
-        setBulkImportText={setBulkImportText}
-        bulkImportError={bulkImportError}
-        setBulkImportError={setBulkImportError}
-        bulkImportOpen={bulkImportOpen}
-        setBulkImportOpen={setBulkImportOpen}
-        executeRequest={async () => {
-          await executeRequest();
-        }}
-        loading={loading}
-        setTestResults={setTestResults}
-        setActiveResult={setActiveResult}
-        // Add these two props explicitly
-        setRequestBody={setRequestBody}
-        setRequestHeaders={setRequestHeaders}
-        saveTestCases={(cases) => {
-          setTestCases(cases);
-          localStorage.setItem("api_tester_test_cases", JSON.stringify(cases));
-        }}
-        {...sharedProps}
-      />
+  return (
+    <div className="space-y-4 pt-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <AuthManager
+          authOptions={authOptions}
+          activeAuthOption={activeAuthOption}
+          setActiveAuthOption={setActiveAuthOption}
+          requestHeaders={requestHeaders}
+          setRequestHeaders={setRequestHeaders}
+          saveAuthOptions={(options) => {
+            setAuthOptions(options);
+            localStorage.setItem(
+              "api_tester_auth_options",
+              JSON.stringify(options)
+            );
+          }}
+        />
+
+        {/* Test Case Manager */}
+        <TestCaseManager
+          testCases={testCases}
+          setTestCases={setTestCases}
+          form={form}
+          requestHeaders={requestHeaders}
+          requestBody={requestBody}
+          method={method}
+          bulkImportText={bulkImportText}
+          setBulkImportText={setBulkImportText}
+          bulkImportError={bulkImportError}
+          setBulkImportError={setBulkImportError}
+          bulkImportOpen={bulkImportOpen}
+          setBulkImportOpen={setBulkImportOpen}
+          executeRequest={async () => {
+            await executeRequest();
+          }}
+          loading={loading}
+          setTestResults={setTestResults}
+          setActiveResult={setActiveResult}
+          // Add these two props explicitly
+          setRequestBody={setRequestBody}
+          setRequestHeaders={setRequestHeaders}
+          saveTestCases={(cases) => {
+            setTestCases(cases);
+            localStorage.setItem(
+              "api_tester_test_cases",
+              JSON.stringify(cases)
+            );
+          }}
+          {...sharedProps}
+        />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Request Builder */}
@@ -334,6 +342,7 @@ export function ApiTester({
             await executeRequest();
           }}
           loading={loading}
+          parameters={parameters}
           method={method}
           path={path}
           apiData={apiData}

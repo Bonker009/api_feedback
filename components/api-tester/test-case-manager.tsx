@@ -74,7 +74,7 @@ export function TestCaseManager({
   const [showTestCaseForm, setShowTestCaseForm] = useState(false);
   const [newTestCaseName, setNewTestCaseName] = useState("");
   const [newTestCaseDescription, setNewTestCaseDescription] = useState("");
-  console.log("TestCaseManager render : ",testCases);
+  console.log("TestCaseManager render : ", testCases);
   const groupTestCasesByTitle = (
     testCases: TestCase[]
   ): Record<string, TestCase[]> => {
@@ -136,37 +136,38 @@ export function TestCaseManager({
     const updatedTestCases = testCases.filter((tc) => tc.id !== id);
     saveTestCases(updatedTestCases);
   };
- 
+
   const runTestCase = async (testCase: TestCase, e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
-    if (loading) return; 
-
     try {
+      // Set URL and method
       form.setValue("url", testCase.request.url);
 
-      const updatedHeaders = { ...testCase.request.headers };
-      setRequestHeaders(updatedHeaders);
+      // Set headers
+      setRequestHeaders({ ...testCase.request.headers });
 
-      let bodyString = "";
+      // Set body if present
       if (testCase.request.body) {
-        if (typeof testCase.request.body === "string") {
-          bodyString = testCase.request.body;
-        } else {
-          bodyString = JSON.stringify(testCase.request.body, null, 2);
-        }
-      }
-      console.log("Running test case with body:", bodyString);
-      setRequestBody(bodyString);
-      form.setValue("body", bodyString);
+        const bodyString =
+          typeof testCase.request.body === "string"
+            ? testCase.request.body
+            : JSON.stringify(testCase.request.body, null, 2);
 
+        setRequestBody(bodyString);
+        form.setValue("body", bodyString);
+      }
+
+      // Wait for state updates
       await new Promise((resolve) => setTimeout(resolve, 100));
 
+      // Execute request
       await executeRequest();
 
+      // Update test case with last run timestamp
       const updatedTestCases = testCases.map((tc) =>
         tc.id === testCase.id
           ? { ...tc, lastRun: new Date().toISOString() }
@@ -174,6 +175,7 @@ export function TestCaseManager({
       );
 
       saveTestCases(updatedTestCases);
+      // setActiveResult(result.id); // Remove or update this line if result is needed
     } catch (error) {
       console.error("Error running test case:", error);
     }
@@ -291,11 +293,13 @@ export function TestCaseManager({
       <CardContent className="space-y-4">
         <div className="flex justify-end gap-2">
           <BulkImportDialog
+            requestBody={requestBody}
             open={bulkImportOpen}
             setOpen={setBulkImportOpen}
             bulkImportText={bulkImportText}
             setBulkImportText={setBulkImportText}
             bulkImportError={bulkImportError}
+            setBulkImportError={setBulkImportError}
             handleBulkImport={handleBulkImport}
           />
 

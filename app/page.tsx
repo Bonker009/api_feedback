@@ -100,7 +100,7 @@ export default function Home() {
                     No API specifications found
                   </p>
                   <Link href="/upload">
-                    <Button>
+                    <Button className="bg-red-300 hover:bg-red-400 transform-fill duration-150">
                       <Plus className="h-4 w-4 mr-2" />
                       Add Specification
                     </Button>

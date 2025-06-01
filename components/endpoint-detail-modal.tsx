@@ -1,5 +1,5 @@
 "use client";
-
+import RandExp from "randexp";
 import { useState } from "react";
 import {
   Dialog,
@@ -22,6 +22,9 @@ import {
 } from "@/components/ui/accordion";
 import CustomDialogContent from "./custom-dialog-variants";
 import { ApiTester } from "./api-tester";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import TestCaseGeneratorPanel from "./TestCaseGeneratorPanel";
 
 type EndpointDetailModalProps = {
   isOpen: boolean;
@@ -101,12 +104,9 @@ export function EndpointDetailModal({
       const result: any = {};
       if (schema.properties) {
         Object.keys(schema.properties).forEach((propName) => {
-          // Check if property is required
           const isRequired =
             schema.required && schema.required.includes(propName);
-          // Only include required properties in sample by default
           if (isRequired || Math.random() > 0.3) {
-            // Include some non-required props randomly
             result[propName] = generateSampleRequest(
               schema.properties[propName],
               components
@@ -125,7 +125,14 @@ export function EndpointDetailModal({
       if (schema.format === "email") return "user@example.com";
       if (schema.format === "uri") return "https://example.com";
       if (schema.enum) return schema.enum[0];
-      if (schema.pattern) return `string matching pattern: ${schema.pattern}`;
+      if (schema.pattern) {
+        try {
+          const pattern = new RegExp(schema.pattern);
+          return new RandExp(pattern).gen();
+        } catch (err) {
+          return `Invalid regex pattern: ${schema.pattern}`;
+        }
+      }
       return "string value";
     } else if (schema.type === "integer" || schema.type === "number") {
       if (schema.minimum !== undefined && schema.maximum !== undefined) {
@@ -157,6 +164,11 @@ export function EndpointDetailModal({
   const responseSample = responseSchema
     ? generateSampleRequest(responseSchema, apiData.components)
     : null;
+
+  const [apiUrl, setApiUrl] = useState(
+    apiData.servers?.[0]?.url || "http://localhost:8080"
+  );
+  const [token, setToken] = useState("");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -208,173 +220,183 @@ export function EndpointDetailModal({
         </DialogHeader>
 
         <Tabs defaultValue="details">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="schema">Schema</TabsTrigger>
             <TabsTrigger value="request">Request Sample</TabsTrigger>
             <TabsTrigger value="response">Response Sample</TabsTrigger>
-            <TabsTrigger value="testing">Testing</TabsTrigger>
+
             <TabsTrigger value="notes">Notes</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="details" className="space-y-4">
-            {methodData.parameters && methodData.parameters.length > 0 && (
-              <div>
-                <h4 className="font-medium mb-2">Parameters:</h4>
-                <div className="border rounded-md overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          In
-                        </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Type
-                        </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Required
-                        </th>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Description
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {methodData.parameters.map((param: any, i: number) => (
-                        <tr key={i}>
-                          <td className="px-4 py-2 text-sm font-medium">
-                            {param.name}
-                          </td>
-                          <td className="px-4 py-2 text-sm">{param.in}</td>
-                          <td className="px-4 py-2 text-sm">
-                            {param.schema?.type ||
-                              param.schema?.$ref?.split("/").pop() ||
-                              "-"}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            {param.required ? "Yes" : "No"}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            {param.description || "-"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {methodData.requestBody && (
-              <div>
-                <h4 className="font-medium mb-2">Request Body:</h4>
-                <div className="border rounded-md p-4 bg-gray-50">
-                  {Object.keys(methodData.requestBody.content).map(
-                    (contentType) => (
-                      <div key={contentType} className="mb-2">
-                        <span className="font-medium">{contentType}</span>
-                        {methodData.requestBody.content[contentType].schema && (
-                          <div className="ml-4 text-sm">
-                            Schema:{" "}
-                            <code className="bg-gray-100 px-1 py-0.5 rounded">
-                              {methodData.requestBody.content[
-                                contentType
-                              ].schema.$ref
-                                ?.split("/")
-                                .pop() || "Schema"}
-                            </code>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  )}
-                  {methodData.requestBody.required && (
-                    <div className="text-red-500 text-sm mt-1">Required</div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div>
-              <h4 className="font-medium mb-2">Responses:</h4>
-              <div className="border rounded-md overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Description
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Content Type
-                      </th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Schema
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {Object.entries(methodData.responses).map(
-                      ([code, response]: [string, any]) => (
-                        <tr key={code}>
-                          <td className="px-4 py-2 text-sm font-medium">
-                            {code}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            {response.description}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            {response.content
-                              ? Object.keys(response.content).join(", ")
-                              : "-"}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            {response.content
-                              ? Object.values(response.content).map(
-                                  (content: any, i: number) => (
-                                    <div key={i}>
-                                      {content.schema?.$ref?.split("/").pop() ||
-                                        content.schema?.type ||
-                                        "-"}
-                                    </div>
-                                  )
-                                )
-                              : "-"}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {methodData.security && methodData.security.length > 0 && (
-              <div>
-                <h4 className="font-medium mb-2">Security:</h4>
-                <div className="border rounded-md p-4 bg-gray-50">
-                  {methodData.security.map((security: any, i: number) => (
-                    <div key={i} className="mb-1">
-                      {Object.keys(security).map((key) => (
-                        <div key={key}>
-                          <span className="font-medium">{key}</span>
-                          {security[key].length > 0 && (
-                            <span className="ml-2 text-sm">
-                              Scopes: {security[key].join(", ")}
-                            </span>
-                          )}
-                        </div>
-                      ))}
+          <TabsContent value="details" className="space-y-6">
+            {/* Parameters Section */}
+            <Accordion
+              type="multiple"
+              defaultValue={["parameters", "requestBody", "responses"]}
+            >
+              <AccordionItem value="parameters">
+                <AccordionTrigger className="text-lg font-semibold flex items-center gap-2">
+                  <span>🧩</span> Parameters
+                </AccordionTrigger>
+                <AccordionContent>
+                  {methodData.parameters && methodData.parameters.length > 0 ? (
+                    <div className="border rounded-md overflow-hidden">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Name
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              In
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Type
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Required
+                            </th>
+                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Description
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-100">
+                          {methodData.parameters.map((param: any, i: number) => (
+                            <tr key={i} className="hover:bg-gray-50">
+                              <td className="px-4 py-2 text-sm font-medium">
+                                {param.name}
+                              </td>
+                              <td className="px-4 py-2 text-sm">{param.in}</td>
+                              <td className="px-4 py-2 text-sm">
+                                {param.schema?.type ||
+                                  param.schema?.$ref?.split("/").pop() ||
+                                  "-"}
+                              </td>
+                              <td className="px-4 py-2 text-sm">
+                                {param.required ? (
+                                  <span className="text-green-600 font-semibold">
+                                    Yes
+                                  </span>
+                                ) : (
+                                  <span className="text-gray-400">No</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-2 text-sm">
+                                {param.description || "-"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                  ) : (
+                    <div className="text-gray-500 italic px-2 py-4">
+                      No parameters for this endpoint.
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Request Body Section */}
+              <AccordionItem value="requestBody">
+                <AccordionTrigger className="text-lg font-semibold flex items-center gap-2">
+                  <span>📦</span> Request Body
+                </AccordionTrigger>
+                <AccordionContent>
+                  {methodData.requestBody ? (
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      {Object.keys(methodData.requestBody.content).map(
+                        (contentType) => (
+                          <div key={contentType} className="mb-2">
+                            <span className="font-medium">{contentType}</span>
+                            {methodData.requestBody.content[contentType].schema && (
+                              <div className="ml-4 text-sm">
+                                Schema:{" "}
+                                <code className="bg-gray-100 px-1 py-0.5 rounded">
+                                  {methodData.requestBody.content[contentType].schema.$ref
+                                    ?.split("/")
+                                    .pop() || "Schema"}
+                                </code>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      )}
+                      {methodData.requestBody.required && (
+                        <div className="text-red-500 text-sm mt-1">Required</div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-gray-500 italic px-2 py-4">
+                      No request body required.
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+
+              {/* Responses Section */}
+              <AccordionItem value="responses">
+                <AccordionTrigger className="text-lg font-semibold flex items-center gap-2">
+                  <span>📨</span> Responses
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="border rounded-md overflow-hidden">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Description
+                          </th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Content Type
+                          </th>
+                          <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Schema
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-100">
+                        {Object.entries(methodData.responses).map(
+                          ([code, response]: [string, any]) => (
+                            <tr key={code} className="hover:bg-gray-50">
+                              <td className="px-4 py-2 text-sm font-medium">
+                                {code}
+                              </td>
+                              <td className="px-4 py-2 text-sm">
+                                {response.description}
+                              </td>
+                              <td className="px-4 py-2 text-sm">
+                                {response.content
+                                  ? Object.keys(response.content).join(", ")
+                                  : "-"}
+                              </td>
+                              <td className="px-4 py-2 text-sm">
+                                {response.content
+                                  ? Object.values(response.content).map(
+                                      (content: any, i: number) => (
+                                        <div key={i}>
+                                          {content.schema?.$ref?.split("/").pop() ||
+                                            content.schema?.type ||
+                                            "-"}
+                                        </div>
+                                      )
+                                    )
+                                  : "-"}
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </TabsContent>
 
           <TabsContent value="schema" className="space-y-4">
@@ -409,20 +431,27 @@ export function EndpointDetailModal({
             <div>
               <h4 className="font-medium mb-2">Sample Request:</h4>
               {requestSample ? (
-                <div className="bg-slate-300 p-4 rounded-md overflow-x-auto relative group">
+                <div className="relative group rounded-md overflow-hidden">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                     onClick={() =>
                       copyToClipboard(JSON.stringify(requestSample, null, 2))
                     }
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
-                  <pre className="text-sm">
+                  <SyntaxHighlighter
+                    language="json"
+                    style={vscDarkPlus}
+                    customStyle={{
+                      margin: 0,
+                      borderRadius: "0.375rem",
+                    }}
+                  >
                     {JSON.stringify(requestSample, null, 2)}
-                  </pre>
+                  </SyntaxHighlighter>
                 </div>
               ) : (
                 <div className="bg-gray-50 p-4 rounded-md text-gray-500">
@@ -508,20 +537,27 @@ export function EndpointDetailModal({
             <div>
               <h4 className="font-medium mb-2">Sample Response (200 OK):</h4>
               {responseSample ? (
-                <div className="bg-slate-300 p-4 rounded-md overflow-x-auto relative group">
+                <div className="relative group rounded-md overflow-hidden">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                     onClick={() =>
                       copyToClipboard(JSON.stringify(responseSample, null, 2))
                     }
                   >
                     <Copy className="h-4 w-4" />
                   </Button>
-                  <pre className="text-sm">
+                  <SyntaxHighlighter
+                    language="json"
+                    style={vscDarkPlus}
+                    customStyle={{
+                      margin: 0,
+                      borderRadius: "0.375rem",
+                    }}
+                  >
                     {JSON.stringify(responseSample, null, 2)}
-                  </pre>
+                  </SyntaxHighlighter>
                 </div>
               ) : (
                 <div className="bg-gray-50 p-4 rounded-md text-gray-500">
@@ -556,12 +592,12 @@ export function EndpointDetailModal({
                             <span>{response.description}</span>
                           </div>
                         </AccordionTrigger>
-                        <AccordionContent className="bg-gray-50 p-4 rounded-b-md border-t">
+                        <AccordionContent className="bg-gray-50 rounded-b-md border-t overflow-hidden">
                           <div className="relative group">
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                               onClick={() =>
                                 copyToClipboard(
                                   JSON.stringify(
@@ -580,7 +616,14 @@ export function EndpointDetailModal({
                             >
                               <Copy className="h-4 w-4" />
                             </Button>
-                            <pre className="text-sm">
+                            <SyntaxHighlighter
+                              language="json"
+                              style={vscDarkPlus}
+                              customStyle={{
+                                margin: 0,
+                                borderRadius: "0.375rem",
+                              }}
+                            >
                               {JSON.stringify(
                                 {
                                   success: code.startsWith("2"),
@@ -592,7 +635,7 @@ export function EndpointDetailModal({
                                 null,
                                 2
                               )}
-                            </pre>
+                            </SyntaxHighlighter>
                           </div>
                         </AccordionContent>
                       </AccordionItem>
@@ -631,15 +674,7 @@ export function EndpointDetailModal({
               </div>
             )}
           </TabsContent>
-          <TabsContent value="testing">
-            <ApiTester
-              path={path}
-              method={method}
-              apiData={apiData}
-              requestSample={requestSample}
-              responseSample={responseSample}
-            />
-          </TabsContent>
+
           <TabsContent value="notes">
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-2">

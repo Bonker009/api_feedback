@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://44.203.171.232:8080",
       "description": "Generated server url"
     }
   ],
@@ -304,42 +304,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseObject"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/profile/update-profile": {
-      "put": {
-        "tags": [
-          "profile-controller"
-        ],
-        "summary": "Update profile image",
-        "operationId": "updateProfileImage",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProfileImageRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseAppUserResponse"
                 }
               }
             }
@@ -787,45 +751,12 @@
         ]
       }
     },
-    "/api/v1/code-challenge/{codeId}": {
-      "get": {
-        "tags": [
-          "code-challenge-controller"
-        ],
-        "operationId": "getCodeChallengeById",
-        "parameters": [
-          {
-            "name": "codeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseCodeChallenge"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
+    "/api/v1/code-challenge/update/{codeId}": {
       "put": {
         "tags": [
           "code-challenge-controller"
         ],
+        "summary": "Update a code challenge by ID",
         "operationId": "updateCodeChallenge",
         "parameters": [
           {
@@ -854,41 +785,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseCodeChallenge"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "code-challenge-controller"
-        ],
-        "operationId": "deleteCodeChallenge",
-        "parameters": [
-          {
-            "name": "codeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseCodeChallenge"
+                  "$ref": "#/components/schemas/ApiResponseCodingChallengeResponse"
                 }
               }
             }
@@ -901,68 +798,32 @@
         ]
       }
     },
-    "/api/developer-profile": {
-      "get": {
-        "tags": [
-          "developer-profiles-controller"
-        ],
-        "operationId": "getCurrentProfileDev",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseDeveloperProfileResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
+    "/api/developer-profile/complete-profile": {
       "put": {
         "tags": [
           "developer-profiles-controller"
         ],
-        "operationId": "updateDeveloperProfiles",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeveloperProfilesRequest"
-              }
+        "operationId": "completeProfiDeveloperProfiles",
+        "parameters": [
+          {
+            "name": "positionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseDeveloperProfileResponse"
-                }
-              }
+          {
+            "name": "jobTypeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "developer-profiles-controller"
         ],
-        "operationId": "createDeveloperProfiles",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1157,48 +1018,24 @@
         ]
       }
     },
-    "/api/v1/recruiter-profile/create": {
-      "post": {
-        "tags": [
-          "recruiter-controller"
-        ],
-        "operationId": "createRecruiterProfile",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RecruiterRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseRecruiter"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/request/join": {
+    "/api/v1/projects/request/join/{project-id}": {
       "post": {
         "tags": [
           "project-controller"
         ],
         "summary": "Request to join project",
         "operationId": "createRequestJoinProject",
+        "parameters": [
+          {
+            "name": "project-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1228,18 +1065,29 @@
         ]
       }
     },
-    "/api/v1/projects/invite/join": {
+    "/api/v1/projects/invite/join/{project-id}": {
       "post": {
         "tags": [
           "project-controller"
         ],
         "summary": "Invite to join project",
         "operationId": "createInviteJoinProject",
+        "parameters": [
+          {
+            "name": "project-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JoinProjectRequest"
+                "$ref": "#/components/schemas/InviteProjectRequest"
               }
             }
           },
@@ -1251,7 +1099,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseJoinProject"
+                  "$ref": "#/components/schemas/ApiResponseListJoinProject"
                 }
               }
             }
@@ -1537,6 +1385,26 @@
               "format": "int32",
               "default": 10
             }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skills",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
           }
         ],
         "responses": {
@@ -1681,7 +1549,7 @@
         ]
       }
     },
-    "/api/v1/hackathons/join-hackathon": {
+    "/api/v1/hackathons/join-hackathon/{hackathon-id}": {
       "post": {
         "tags": [
           "hackathon-controller"
@@ -1791,34 +1659,12 @@
         ]
       }
     },
-    "/api/v1/code-challenge": {
-      "get": {
-        "tags": [
-          "code-challenge-controller"
-        ],
-        "operationId": "getAllCodeChallenge",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseListCodeChallenge"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
+    "/api/v1/code-challenge/create": {
       "post": {
         "tags": [
           "code-challenge-controller"
         ],
+        "summary": "Create a new code challenge",
         "operationId": "createCodeChallenge",
         "requestBody": {
           "content": {
@@ -1836,7 +1682,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseCodeChallenge"
+                  "$ref": "#/components/schemas/ApiResponseCodingChallengeResponse"
                 }
               }
             }
@@ -1864,23 +1710,6 @@
             "schema": {
               "type": "string",
               "format": "uuid"
-            }
-          },
-          {
-            "name": "bookmarkType",
-            "in": "query",
-            "description": "choose target type",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "choose target type",
-              "enum": [
-                "PROJECTS",
-                "HACKATHONS",
-                "RECRUITERS",
-                "DEVELOPERS",
-                "JOBS"
-              ]
             }
           }
         ],
@@ -2136,7 +1965,7 @@
         }
       }
     },
-    "/api/developer-profile/add-github-username/{githubUsername}": {
+    "/api/developer-profile/add-github-username/{github-username}": {
       "post": {
         "tags": [
           "developer-profiles-controller"
@@ -2144,10 +1973,11 @@
         "operationId": "addGithubUsername",
         "parameters": [
           {
-            "name": "githubUsername",
-            "in": "query",
+            "name": "github-username",
+            "in": "path",
             "required": true,
             "schema": {
+              "pattern": "^[a-zA-Z0-9_-]{1,39}$",
               "type": "string"
             }
           }
@@ -2226,15 +2056,6 @@
         "operationId": "updateApprovalTrue",
         "parameters": [
           {
-            "name": "status",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
-          },
-          {
             "name": "project-id",
             "in": "path",
             "required": true,
@@ -2245,6 +2066,43 @@
           },
           {
             "name": "developer-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseObject"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/accept-invite/{project-id}": {
+      "patch": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Accept invite",
+        "operationId": "acceptProjectInvite",
+        "parameters": [
+          {
+            "name": "project-id",
             "in": "path",
             "required": true,
             "schema": {
@@ -2341,7 +2199,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EvaluateDeveloperRequest"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EvaluateDeveloperRequest"
+                }
               }
             }
           },
@@ -2373,6 +2234,76 @@
         ],
         "summary": "Get all topics",
         "operationId": "getAllTopics",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListTopicResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/topics/current-user": {
+      "get": {
+        "tags": [
+          "topic-controller"
+        ],
+        "summary": "Get topics by current user",
+        "operationId": "getTopicsByCurrentUser",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2405,67 +2336,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseListSubmissionResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/skills": {
-      "get": {
-        "tags": [
-          "skill-controller"
-        ],
-        "operationId": "getAllSkill",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseListSkill"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/skills/{skill-id}": {
-      "get": {
-        "tags": [
-          "skill-controller"
-        ],
-        "operationId": "getAllSkill_1",
-        "parameters": [
-          {
-            "name": "skill-id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponseSkill"
                 }
               }
             }
@@ -2540,21 +2410,15 @@
             }
           },
           {
-            "name": "skill",
+            "name": "skills",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
             }
           },
           {
@@ -2629,21 +2493,15 @@
             }
           },
           {
-            "name": "skill",
+            "name": "skills",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "position",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
             }
           },
           {
@@ -2723,7 +2581,7 @@
         "tags": [
           "project-controller"
         ],
-        "summary": "History of user's joined project",
+        "summary": "History of created project",
         "operationId": "getAllProjectHistory",
         "parameters": [
           {
@@ -2744,6 +2602,26 @@
               "type": "integer",
               "format": "int32",
               "default": 10
+            }
+          },
+          {
+            "name": "projectName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skills",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
             }
           }
         ],
@@ -2803,19 +2681,68 @@
         ]
       }
     },
-    "/api/v1/position": {
+    "/api/v1/projects/join-project": {
       "get": {
         "tags": [
-          "position-controller"
+          "project-controller"
         ],
-        "operationId": "getAllPositions",
+        "summary": "Get all developer that join by request or invite in the project",
+        "operationId": "getJoinProjectByOwner",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "isInvited",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "positionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseListPosition"
+                  "$ref": "#/components/schemas/ApiResponseListJoinProject"
                 }
               }
             }
@@ -2828,20 +2755,52 @@
         ]
       }
     },
-    "/api/v1/position/{position-id}": {
+    "/api/v1/projects/join-project-history": {
       "get": {
         "tags": [
-          "position-controller"
+          "project-controller"
         ],
-        "operationId": "getPositionById",
+        "summary": "History of joined project",
+        "operationId": "getAllJoinedProject",
         "parameters": [
           {
-            "name": "position-id",
-            "in": "path",
-            "required": true,
+            "name": "page",
+            "in": "query",
+            "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "projectName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skills",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
             }
           }
         ],
@@ -2851,7 +2810,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponsePosition"
+                  "$ref": "#/components/schemas/ApiResponseListProjectResponse"
                 }
               }
             }
@@ -2870,6 +2829,99 @@
           "join-job-controller"
         ],
         "operationId": "getAllJoinJob",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "positionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "jobType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListJoinJobResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/join-jobs/job-owner/{job-id}": {
+      "get": {
+        "tags": [
+          "join-job-controller"
+        ],
+        "summary": "get all apply by job id by current user",
+        "operationId": "getJoinJobByJobId",
+        "parameters": [
+          {
+            "name": "job-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "isApprove",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -2962,12 +3014,80 @@
         ]
       }
     },
+    "/api/v1/join-jobs/all-invitation": {
+      "get": {
+        "tags": [
+          "join-job-controller"
+        ],
+        "summary": "get all invitation by current user",
+        "operationId": "getAllInvitation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListJoinJobResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/jobs/my-all-job": {
       "get": {
         "tags": [
           "jobs-controller"
         ],
         "operationId": "getAllJobsByCreatorId",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skills",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -3013,6 +3133,14 @@
               "type": "integer",
               "format": "int32",
               "default": 10
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -3062,6 +3190,14 @@
               "format": "int32",
               "default": 10
             }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3088,7 +3224,7 @@
         "tags": [
           "resume-controller"
         ],
-        "operationId": "getAllResumes",
+        "operationId": "getCurrentResume",
         "responses": {
           "200": {
             "description": "OK",
@@ -3136,6 +3272,195 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/data/get-badge-current-user": {
+      "get": {
+        "tags": [
+          "get-default-data-controller"
+        ],
+        "operationId": "getBadgeCurrentUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDeveloperBadge"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data/get-all-skills": {
+      "get": {
+        "tags": [
+          "get-default-data-controller"
+        ],
+        "operationId": "getAllSkill",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListSkill"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data/get-all-positions": {
+      "get": {
+        "tags": [
+          "get-default-data-controller"
+        ],
+        "operationId": "getAllPositions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListPosition"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/data/get-all-job-types": {
+      "get": {
+        "tags": [
+          "get-default-data-controller"
+        ],
+        "operationId": "getAllJobTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListJobType"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/code-challenge/get-by-id/{codeId}": {
+      "get": {
+        "tags": [
+          "code-challenge-controller"
+        ],
+        "summary": "Get a code challenge by ID",
+        "operationId": "getCodeChallengeById",
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCodingChallengeResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/code-challenge/get-all": {
+      "get": {
+        "tags": [
+          "code-challenge-controller"
+        ],
+        "summary": "Get all code challenges",
+        "operationId": "getAllCodeChallenge",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCodingChallengeResponseCard"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/code-challenge/by-user": {
+      "get": {
+        "tags": [
+          "code-challenge-controller"
+        ],
+        "summary": "Get all code challenges by Current User",
+        "operationId": "getAllCodeChallengesByUserId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListCodingChallengeResponseCard"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/v1/bookmark": {
@@ -3203,19 +3528,19 @@
         ]
       }
     },
-    "/api/v1/badge": {
+    "/api/developer-profile": {
       "get": {
         "tags": [
-          "badge-controller"
+          "developer-profiles-controller"
         ],
-        "operationId": "getBadgeCurrentUser",
+        "operationId": "getCurrentProfileDev",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseDeveloperBadge"
+                  "$ref": "#/components/schemas/ApiResponseDeveloperProfileResponse"
                 }
               }
             }
@@ -3228,7 +3553,7 @@
         ]
       }
     },
-    "/api/developer-profile/get-github-username/": {
+    "/api/developer-profile/get-github-username": {
       "get": {
         "tags": [
           "developer-profiles-controller"
@@ -3241,6 +3566,62 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiResponseString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/developer-profile/all-developer": {
+      "get": {
+        "tags": [
+          "developer-profiles-controller"
+        ],
+        "summary": "Get all developer",
+        "operationId": "getAllDeveloper",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseListDeveloperProfileResponse"
                 }
               }
             }
@@ -3290,12 +3671,70 @@
         ]
       }
     },
-    "/api/v1/recruiter-profile/delete": {
+    "/api/v1/projects/join-project/{project-id}": {
       "delete": {
         "tags": [
-          "recruiter-controller"
+          "project-controller"
         ],
-        "operationId": "deleteRecruiterProfile",
+        "summary": "Reject or Cancel invitation or request for owner of the project",
+        "operationId": "deleteJoinProject",
+        "parameters": [
+          {
+            "name": "project-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "developerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseObject"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/join-project/cancel/{project-id}": {
+      "delete": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Cancel request",
+        "operationId": "cancelRequest",
+        "parameters": [
+          {
+            "name": "project-id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -3376,39 +3815,133 @@
           }
         ]
       }
+    },
+    "/api/v1/code-challenge/delete/{codeId}": {
+      "delete": {
+        "tags": [
+          "code-challenge-controller"
+        ],
+        "summary": "Delete a code challenge by ID",
+        "operationId": "deleteCodeChallenge",
+        "parameters": [
+          {
+            "name": "codeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseCodeChallenge"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/bookmark/delete": {
+      "delete": {
+        "tags": [
+          "bookmark-controller"
+        ],
+        "summary": "Delete bookmark",
+        "operationId": "deleteBookmark",
+        "parameters": [
+          {
+            "name": "targetId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseObject"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
       "Education": {
+        "required": [
+          "endYear",
+          "schoolLocation",
+          "schoolName",
+          "startYear"
+        ],
         "type": "object",
         "properties": {
           "schoolName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]+$",
             "type": "string"
           },
           "schoolLocation": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9,\\s]+$",
             "type": "string"
           },
           "startYear": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "date"
           },
           "endYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "description": {
-            "type": "string"
+            "type": "string",
+            "format": "date"
           }
         }
       },
       "ExperienceRequest": {
+        "required": [
+          "companyLocation",
+          "companyName",
+          "position"
+        ],
         "type": "object",
         "properties": {
           "companyName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]+$",
             "type": "string"
           },
           "companyLocation": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9\\s]+$",
             "type": "string"
           },
           "position": {
@@ -3416,41 +3949,67 @@
             "format": "uuid"
           },
           "startYear": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "date"
           },
           "endYear": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "date"
           }
         }
       },
       "Language": {
+        "required": [
+          "language"
+        ],
         "type": "object",
         "properties": {
           "language": {
+            "maxLength": 20,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z]+$",
             "type": "string"
           }
         }
       },
       "Reference": {
+        "required": [
+          "email",
+          "jobTitle",
+          "name",
+          "phoneNumber"
+        ],
         "type": "object",
         "properties": {
           "name": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]+$",
             "type": "string"
           },
           "phoneNumber": {
-            "type": "string"
+            "pattern": "^\\+\\d{1,3}-\\d{6,10}$",
+            "type": "string",
+            "default": "+855-86451138"
           },
           "jobTitle": {
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]+$",
             "type": "string"
           },
           "email": {
+            "pattern": "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
             "type": "string"
           }
         }
       },
       "ResumeInformationRequest": {
+        "required": [
+          "educations",
+          "languages",
+          "skills"
+        ],
         "type": "object",
         "properties": {
           "educations": {
@@ -3494,7 +4053,9 @@
           "email",
           "fullName",
           "information",
+          "isFemale",
           "phoneNumber",
+          "picture",
           "placeOfBirth",
           "position"
         ],
@@ -3503,13 +4064,16 @@
           "fullName": {
             "maxLength": 100,
             "minLength": 0,
-            "type": "string"
+            "pattern": "^[a-zA-Z\\s]+$",
+            "type": "string",
+            "example": "John Doe",
+            "default": "Sok Chanthy"
           },
           "isFemale": {
             "type": "boolean"
           },
           "phoneNumber": {
-            "pattern": "^(\\+\\d{1,3}[- ]?)?\\d{9,15}$",
+            "pattern": "^\\+\\d{1,3}-\\d{6,10}$",
             "type": "string"
           },
           "address": {
@@ -3518,9 +4082,8 @@
             "type": "string"
           },
           "email": {
-            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             "type": "string",
-            "description": "Full name of the user",
             "example": "example@gmail.com",
             "default": "example@gmail.com"
           },
@@ -3563,6 +4126,9 @@
           "payload": {
             "$ref": "#/components/schemas/Resume"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -3582,10 +4148,47 @@
             "type": "string"
           },
           "startYear": {
+            "type": "string",
+            "format": "date"
+          },
+          "endYear": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "PaginationResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
             "type": "integer",
             "format": "int32"
           },
-          "endYear": {
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nextPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "previousPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
             "type": "integer",
             "format": "int32"
           }
@@ -3674,9 +4277,14 @@
         }
       },
       "Skill": {
+        "required": [
+          "skillName"
+        ],
         "type": "object",
         "properties": {
           "skillName": {
+            "maxLength": 100,
+            "minLength": 0,
             "type": "string"
           }
         }
@@ -3690,6 +4298,8 @@
         "type": "object",
         "properties": {
           "title": {
+            "maxLength": 255,
+            "minLength": 0,
             "type": "string"
           },
           "content": {
@@ -3719,6 +4329,9 @@
           },
           "payload": {
             "$ref": "#/components/schemas/Topic"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -3769,7 +4382,7 @@
           },
           "postedAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           },
           "totalUpvote": {
             "type": "integer",
@@ -3835,67 +4448,72 @@
           "lastName": {
             "type": "string"
           },
-          "email": {
-            "type": "string"
-          },
-          "isRecruiter": {
-            "type": "boolean"
-          },
           "profileImageUrl": {
             "type": "string"
           }
         }
       },
       "RecruiterRequest": {
-        "required": [
-          "bio",
-          "companyLocation",
-          "companyName",
-          "companySite",
-          "establishDate",
-          "gender",
-          "industry",
-          "phoneNumber"
-        ],
         "type": "object",
         "properties": {
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]*$",
+            "type": "string",
+            "default": "Sok"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]*$",
+            "type": "string",
+            "default": "Chanthy"
+          },
+          "profilePicture": {
+            "pattern": "^(https?://.*)?$",
+            "type": "string",
+            "default": "https://profile-picture.jpg"
+          },
           "companyName": {
             "pattern": "^(?!\\s*$).{1,100}",
-            "type": "string"
-          },
-          "gender": {
             "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ]
+            "default": "company name"
           },
           "phoneNumber": {
-            "pattern": "^\\+?[1-9]\\d{0,3}(?:[-.\\s]?\\d{1,4}){2,4}$",
-            "type": "string"
+            "pattern": "^\\+\\d{1,3}-\\d{6,10}$",
+            "type": "string",
+            "example": "+855-12345678",
+            "default": "+855-12345678"
           },
           "industry": {
             "pattern": "^(?!\\s*$).{1,100}",
-            "type": "string"
+            "type": "string",
+            "default": "industry"
           },
           "companyLocation": {
             "pattern": "^(?!\\s*$).{1,200}",
-            "type": "string"
+            "type": "string",
+            "default": "Phnom Penh, Cambodia"
           },
           "bio": {
             "pattern": "^(?!\\s*$).{1,100}",
-            "type": "string"
+            "type": "string",
+            "default": "Bio about the recruiter"
           },
           "companySite": {
             "pattern": "^(?!\\s*$).{1,255}",
-            "type": "string"
+            "type": "string",
+            "default": "https://www.companysite.com"
           },
-          "establishDate": {
+          "foundedAt": {
             "type": "string",
             "format": "date"
           },
           "coverPicture": {
-            "type": "string"
+            "pattern": "^(https?://.*)?$",
+            "type": "string",
+            "default": "https://cv.pdf"
           }
         }
       },
@@ -3915,6 +4533,9 @@
           "payload": {
             "$ref": "#/components/schemas/Recruiter"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -3931,13 +4552,6 @@
           "companyName": {
             "type": "string"
           },
-          "gender": {
-            "type": "string",
-            "enum": [
-              "MALE",
-              "FEMALE"
-            ]
-          },
           "phoneNumber": {
             "type": "string"
           },
@@ -3950,19 +4564,22 @@
           "bio": {
             "type": "string"
           },
-          "establishDate": {
+          "foundedAt": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
           },
           "coverPicture": {
             "type": "string"
           },
           "userInformation": {
-            "$ref": "#/components/schemas/AppUserResponse"
+            "$ref": "#/components/schemas/UserResponse"
           }
         }
       },
       "ProjectPositionRequest": {
+        "required": [
+          "positionId"
+        ],
         "type": "object",
         "properties": {
           "maxMembers": {
@@ -4037,6 +4654,9 @@
           "payload": {
             "$ref": "#/components/schemas/Project"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4053,6 +4673,9 @@
             "type": "string"
           },
           "isApproved": {
+            "type": "boolean"
+          },
+          "isInvited": {
             "type": "boolean"
           },
           "projectId": {
@@ -4093,6 +4716,9 @@
             "type": "string"
           },
           "isOpen": {
+            "type": "boolean"
+          },
+          "isBookmark": {
             "type": "boolean"
           },
           "startAt": {
@@ -4146,39 +4772,6 @@
           }
         }
       },
-      "ProfileImageRequest": {
-        "required": [
-          "profileImageUrl"
-        ],
-        "type": "object",
-        "properties": {
-          "profileImageUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "ApiResponseAppUserResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "$ref": "#/components/schemas/AppUserResponse"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "ApiResponseJoinJobResponse": {
         "type": "object",
         "properties": {
@@ -4195,6 +4788,9 @@
           "payload": {
             "$ref": "#/components/schemas/JoinJobResponse"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4208,9 +4804,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "position": {
-            "$ref": "#/components/schemas/Position"
-          },
           "salary": {
             "type": "string"
           },
@@ -4220,11 +4813,17 @@
           "status": {
             "type": "boolean"
           },
+          "isBookmark": {
+            "type": "boolean"
+          },
           "pax": {
             "type": "integer",
             "format": "int32"
           },
           "jobType": {
+            "type": "string"
+          },
+          "position": {
             "type": "string"
           },
           "skills": {
@@ -4246,6 +4845,9 @@
         "properties": {
           "joinJobId": {
             "type": "string"
+          },
+          "isInvited": {
+            "type": "boolean"
           },
           "job": {
             "$ref": "#/components/schemas/JobResponse"
@@ -4294,7 +4896,6 @@
           "location",
           "pax",
           "positionId",
-          "postedDate",
           "salary",
           "skillId",
           "status"
@@ -4303,7 +4904,8 @@
         "properties": {
           "positionId": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "default": "f341c41b-5c02-423a-b518-03b8d2544c27"
           },
           "salary": {
             "type": "string"
@@ -4316,10 +4918,6 @@
           },
           "description": {
             "type": "string"
-          },
-          "postedDate": {
-            "type": "string",
-            "format": "date-time"
           },
           "jobBoard": {
             "$ref": "#/components/schemas/JobBoard"
@@ -4374,6 +4972,9 @@
           "payload": {
             "$ref": "#/components/schemas/JobResponse"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4382,10 +4983,8 @@
       },
       "HackathonRequest": {
         "required": [
-          "createdDate",
           "description",
           "endDate",
-          "fullScore",
           "isAvailable",
           "startDate",
           "title"
@@ -4394,11 +4993,13 @@
         "properties": {
           "title": {
             "pattern": "^(?!\\s*$).{1,100}",
-            "type": "string"
+            "type": "string",
+            "default": "title"
           },
           "description": {
             "pattern": "^(?!\\s*$).{1,255}",
-            "type": "string"
+            "type": "string",
+            "default": "description"
           },
           "startDate": {
             "type": "string",
@@ -4408,18 +5009,13 @@
             "type": "string",
             "format": "date-time"
           },
-          "createdDate": {
-            "type": "string",
-            "format": "date-time"
-          },
           "isAvailable": {
             "type": "boolean"
           },
           "fullScore": {
-            "maximum": 100,
-            "minimum": 50,
-            "type": "integer",
-            "format": "int32"
+            "pattern": "^[0-9]+$",
+            "type": "string",
+            "default": "full score"
           }
         }
       },
@@ -4439,6 +5035,9 @@
           "payload": {
             "$ref": "#/components/schemas/Hackathon"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4457,6 +5056,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "isBookmark": {
+            "type": "boolean"
           },
           "startDate": {
             "type": "string",
@@ -4506,6 +5108,10 @@
           "submission": {
             "type": "string"
           },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "developerId": {
             "$ref": "#/components/schemas/UserResponse"
           }
@@ -4516,10 +5122,6 @@
         "properties": {
           "content": {
             "type": "string"
-          },
-          "postedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -4538,6 +5140,9 @@
           },
           "payload": {
             "$ref": "#/components/schemas/Comment"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -4558,6 +5163,8 @@
         "type": "object",
         "properties": {
           "title": {
+            "maxLength": 100,
+            "minLength": 0,
             "type": "string"
           },
           "description": {
@@ -4573,25 +5180,34 @@
             }
           },
           "score": {
+            "minimum": 100,
             "type": "integer",
             "format": "int32"
           },
           "starterCode": {
             "type": "string"
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
           "language": {
-            "type": "string"
+            "maxLength": 50,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z+#]+$",
+            "type": "string",
+            "description": "Programming language used in the challenge",
+            "example": "Java",
+            "default": "Java"
           }
         }
       },
       "TestCase": {
+        "required": [
+          "expectedOutput",
+          "input"
+        ],
         "type": "object",
         "properties": {
           "input": {
+            "maxItems": 2147483647,
+            "minItems": 1,
             "type": "array",
             "items": {
               "type": "object"
@@ -4602,7 +5218,7 @@
           }
         }
       },
-      "ApiResponseCodeChallenge": {
+      "ApiResponseCodingChallengeResponse": {
         "type": "object",
         "properties": {
           "success": {
@@ -4616,7 +5232,10 @@
             "type": "string"
           },
           "payload": {
-            "$ref": "#/components/schemas/CodeChallenge"
+            "$ref": "#/components/schemas/CodingChallengeResponse"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -4624,11 +5243,12 @@
           }
         }
       },
-      "CodeChallenge": {
+      "CodingChallengeResponse": {
         "type": "object",
         "properties": {
           "challengeId": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "title": {
             "type": "string"
@@ -4647,20 +5267,24 @@
           },
           "createdAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           },
           "score": {
             "type": "integer",
             "format": "int32"
           },
-          "creatorId": {
-            "type": "string"
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
           },
           "starterCode": {
             "type": "string"
           },
           "language": {
             "type": "string"
+          },
+          "participation": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -4668,20 +5292,28 @@
         "type": "object",
         "properties": {
           "firstName": {
-            "pattern": "^[A-Za-z\\s]{1,50}$",
-            "type": "string"
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]*$",
+            "type": "string",
+            "default": "Sok"
           },
           "lastName": {
-            "pattern": "^[A-Za-z\\s]{1,50}$",
-            "type": "string"
+            "maxLength": 100,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z\\s]*$",
+            "type": "string",
+            "default": "Chanthy"
           },
           "coverPicture": {
             "pattern": "^(https?://.*)?$",
-            "type": "string"
+            "type": "string",
+            "default": "https://cover-picture.jpg"
           },
           "profilePicture": {
             "pattern": "^(https?://.*)?$",
-            "type": "string"
+            "type": "string",
+            "default": "https://profile-picture.jpg"
           },
           "bio": {
             "maxLength": 100,
@@ -4696,10 +5328,6 @@
               "FREELANCE"
             ]
           },
-          "jobTypeId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "skills": {
             "type": "array",
             "items": {
@@ -4709,7 +5337,8 @@
           },
           "cv": {
             "pattern": "^(https?://.*)?$",
-            "type": "string"
+            "type": "string",
+            "default": "https://cv.pdf"
           },
           "address": {
             "maxLength": 200,
@@ -4717,12 +5346,10 @@
             "type": "string"
           },
           "phoneNumber": {
-            "pattern": "^(\\+?\\d{7,15})?$",
-            "type": "string"
-          },
-          "positionId": {
+            "pattern": "^\\+\\d{1,3}-\\d{6,10}$",
             "type": "string",
-            "format": "uuid"
+            "example": "+855-12345678",
+            "default": "+855-12345678"
           },
           "female": {
             "type": "boolean"
@@ -4745,6 +5372,9 @@
           "payload": {
             "$ref": "#/components/schemas/DeveloperProfileResponse"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4757,6 +5387,15 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "profilePicture": {
+            "type": "string"
           },
           "bio": {
             "type": "string"
@@ -4778,7 +5417,10 @@
               "FREELANCE"
             ]
           },
-          "jobTypeId": {
+          "jobType": {
+            "type": "string"
+          },
+          "position": {
             "type": "string"
           },
           "phoneNumber": {
@@ -4811,6 +5453,9 @@
           "payload": {
             "$ref": "#/components/schemas/Upvote"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4832,7 +5477,8 @@
       },
       "SubmitCodeRequest": {
         "required": [
-          "code"
+          "code",
+          "timeSubmitted"
         ],
         "type": "object",
         "properties": {
@@ -4864,6 +5510,9 @@
               "type": "string"
             }
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -4874,7 +5523,6 @@
         "required": [
           "description",
           "positionId",
-          "projectId",
           "title"
         ],
         "type": "object",
@@ -4886,10 +5534,6 @@
           "description": {
             "pattern": "^(?!\\s*$).{1,255}",
             "type": "string"
-          },
-          "projectId": {
-            "type": "string",
-            "format": "uuid"
           },
           "positionId": {
             "type": "string",
@@ -4913,39 +5557,70 @@
           "payload": {
             "$ref": "#/components/schemas/JoinProject"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
           }
         }
       },
-      "JoinProjectRequest": {
+      "InviteProjectRequest": {
         "required": [
           "description",
           "developerId",
           "positionId",
-          "projectId",
           "title"
         ],
         "type": "object",
         "properties": {
           "title": {
-            "type": "string"
+            "type": "string",
+            "default": "title"
           },
           "description": {
-            "type": "string"
-          },
-          "projectId": {
             "type": "string",
-            "format": "uuid"
+            "default": "description"
           },
           "developerId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
           },
           "positionId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "ApiResponseListJoinProject": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JoinProject"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -4957,7 +5632,8 @@
         "properties": {
           "password": {
             "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$",
-            "type": "string"
+            "type": "string",
+            "default": "password"
           }
         }
       },
@@ -4976,6 +5652,9 @@
           },
           "payload": {
             "type": "object"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5033,6 +5712,9 @@
           "payload": {
             "$ref": "#/components/schemas/FileMetadata"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5073,6 +5755,9 @@
           "payload": {
             "$ref": "#/components/schemas/Bookmark"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5085,9 +5770,6 @@
           "targetId": {
             "type": "string",
             "format": "uuid"
-          },
-          "targetType": {
-            "type": "string"
           },
           "bookmarkBy": {
             "type": "string",
@@ -5107,11 +5789,13 @@
         "properties": {
           "firstName": {
             "pattern": "^\\w+$",
-            "type": "string"
+            "type": "string",
+            "default": "first name"
           },
           "lastName": {
             "pattern": "^\\w+$",
-            "type": "string"
+            "type": "string",
+            "default": "last name"
           },
           "email": {
             "pattern": "^[\\w\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
@@ -5126,6 +5810,31 @@
           "password": {
             "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$",
             "type": "string"
+          }
+        }
+      },
+      "ApiResponseAppUserResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/AppUserResponse"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -5167,6 +5876,9 @@
           },
           "payload": {
             "$ref": "#/components/schemas/AuthResponse"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5218,6 +5930,9 @@
           "payload": {
             "type": "string"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5240,6 +5955,9 @@
           "payload": {
             "$ref": "#/components/schemas/ProjectResponse"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5260,6 +5978,9 @@
             "type": "string"
           },
           "isOpen": {
+            "type": "boolean"
+          },
+          "isBookmark": {
             "type": "boolean"
           },
           "startAt": {
@@ -5288,7 +6009,7 @@
       "SubmitHackathonRequest": {
         "type": "object",
         "properties": {
-          "submission": {
+          "submissionLink": {
             "type": "string"
           }
         }
@@ -5324,6 +6045,9 @@
             "items": {
               "$ref": "#/components/schemas/TopicResponse"
             }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5378,6 +6102,9 @@
               "$ref": "#/components/schemas/SubmissionResponse"
             }
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5400,53 +6127,6 @@
           }
         }
       },
-      "ApiResponseListSkill": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Skill"
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ApiResponseSkill": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "$ref": "#/components/schemas/Skill"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "ApiResponseListProjectResponse": {
         "type": "object",
         "properties": {
@@ -5465,6 +6145,9 @@
             "items": {
               "$ref": "#/components/schemas/ProjectResponse"
             }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5491,52 +6174,8 @@
               "$ref": "#/components/schemas/ProjectPosition"
             }
           },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ApiResponseListPosition": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Position"
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ApiResponsePosition": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "$ref": "#/components/schemas/Position"
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5563,6 +6202,9 @@
               "$ref": "#/components/schemas/JoinJobResponse"
             }
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5584,6 +6226,9 @@
           },
           "payload": {
             "$ref": "#/components/schemas/JoinJobDetailResponse"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5633,6 +6278,9 @@
               "$ref": "#/components/schemas/JobResponse"
             }
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5655,6 +6303,9 @@
           "payload": {
             "$ref": "#/components/schemas/Jobs"
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5669,7 +6320,7 @@
             "format": "uuid"
           },
           "position": {
-            "$ref": "#/components/schemas/Position"
+            "type": "string"
           },
           "salary": {
             "type": "string"
@@ -5678,6 +6329,9 @@
             "type": "string"
           },
           "status": {
+            "type": "boolean"
+          },
+          "isBookmark": {
             "type": "boolean"
           },
           "description": {
@@ -5727,6 +6381,9 @@
               "$ref": "#/components/schemas/HackathonResponse"
             }
           },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -5745,6 +6402,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "isBookmark": {
+            "type": "boolean"
           },
           "startDate": {
             "type": "string",
@@ -5774,56 +6434,6 @@
           }
         }
       },
-      "ApiResponseListCodeChallenge": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CodeChallenge"
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ApiResponseListObject": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "ApiResponseDeveloperBadge": {
         "type": "object",
         "properties": {
@@ -5839,6 +6449,9 @@
           },
           "payload": {
             "$ref": "#/components/schemas/DeveloperBadge"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
           },
           "timestamp": {
             "type": "string",
@@ -5868,6 +6481,289 @@
         "properties": {
           "badges": {
             "$ref": "#/components/schemas/Badges"
+          }
+        }
+      },
+      "ApiResponseListSkill": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Skill"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListPosition": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListJobType": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobType"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "JobType": {
+        "type": "object",
+        "properties": {
+          "jobTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "jobTypeName": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiResponseListCodingChallengeResponseCard": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodingChallengeResponseCard"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CodingChallengeResponseCard": {
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "language": {
+            "type": "string"
+          },
+          "profileUser": {
+            "type": "string"
+          },
+          "participation": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ApiResponseListObject": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseListDeveloperProfileResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeveloperProfileResponse"
+            }
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiResponseCodeChallenge": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/CodeChallenge"
+          },
+          "paginationResponse": {
+            "$ref": "#/components/schemas/PaginationResponse"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CodeChallenge": {
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "instruction": {
+            "type": "string"
+          },
+          "testCase": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TestCase"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "starterCode": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "profileUser": {
+            "type": "string"
+          },
+          "participation": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }

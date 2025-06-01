@@ -26,6 +26,8 @@ import {
   Check,
   X,
   BarChart,
+  Shield,
+  PlaneTakeoff,
 } from "lucide-react";
 import { EndpointDetailModal } from "@/components/endpoint-detail-modal";
 import {
@@ -71,6 +73,7 @@ export default function Documentation() {
   const id = params?.id as string;
 
   const [apiData, setApiData] = useState<any>(null);
+
   const [endpointStatuses, setEndpointStatuses] = useState<EndpointStatus[]>(
     []
   );
@@ -85,6 +88,7 @@ export default function Documentation() {
   >({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [controllerSearch, setControllerSearch] = useState("");
 
   useEffect(() => {
     async function loadData() {
@@ -211,6 +215,15 @@ export default function Documentation() {
 
     return grouped;
   }, [endpoints, activeTab]);
+
+  const filteredControllers = useMemo(() => {
+    const controllers = Object.entries(endpointsByController);
+    if (!controllerSearch) return controllers;
+
+    return controllers.filter(([controller]) =>
+      controller.toLowerCase().includes(controllerSearch.toLowerCase())
+    );
+  }, [endpointsByController, controllerSearch]);
 
   const toggleEndpointStatus = async (path: string, method: string) => {
     try {
@@ -402,7 +415,6 @@ export default function Documentation() {
     }
   };
 
-  // Calculate stats for the header
   const totalEndpoints = endpoints.length;
   const workingEndpoints = endpoints.filter((e) => e.working).length;
   const implementationRate =
@@ -476,16 +488,48 @@ export default function Documentation() {
     <div className="min-h-screen bg-gray-50">
       <Header
         title={apiData?.info?.title || "API Documentation"}
-        description={`${apiData?.info?.description || ""} (Version: ${
-          apiData?.info?.version || "unknown"
-        })`}
         showBackButton={true}
       />
-
       <main className="container mx-auto py-8 px-4">
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>API Information</CardTitle>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-lg">
+                  {apiData?.info?.title || "API Documentation"}
+                </CardTitle>
+                <CardDescription className="text-sm text-slate-500">
+                  Version: {apiData?.info?.version || "N/A"}
+                </CardDescription>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
+                  {totalEndpoints} Endpoints
+                </Badge>
+                <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
+                  {workingEndpoints} Working
+                </Badge>
+                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
+                  {implementationRate}% Implementation Rate
+                </Badge>
+                <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
+                  <BarChart className="inline h-4 w-4 mr-1" />
+                  Penh Seyha
+                </Badge>
+                <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
+                  <Shield className="inline h-4 w-4 mr-1" />
+                  {apiData?.components?.securitySchemes?.bearerAuth?.scheme}
+                </Badge>
+                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
+                  <PlaneTakeoff className="inline h-4 w-4 mr-1" />
+                  {apiData?.components?.securitySchemes?.bearerAuth?.type}
+                </Badge>
+              </div>
+            </div>
+
+            <CardDescription className="text-sm text-slate-700 ">
+              {apiData?.info?.description || "No description available"}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="mb-4">
@@ -553,71 +597,92 @@ export default function Documentation() {
 
           <TabsContent value="by-controller" className="mt-6">
             <div className="space-y-6">
-              {Object.entries(endpointsByController).length === 0 ? (
+              {/* Add search input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search controllers..."
+                  value={controllerSearch}
+                  onChange={(e) => setControllerSearch(e.target.value)}
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute right-3 top-2.5 text-gray-400">
+                  {controllerSearch && (
+                    <button
+                      onClick={() => setControllerSearch("")}
+                      className="hover:text-gray-600"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {filteredControllers.length === 0 ? (
                 <Card>
                   <CardContent className="py-8">
                     <p className="text-center text-gray-500">
-                      No endpoints found
+                      {controllerSearch
+                        ? `No controllers matching "${controllerSearch}"`
+                        : "No endpoints found"}
                     </p>
                   </CardContent>
                 </Card>
               ) : (
-                Object.entries(endpointsByController).map(
-                  ([controller, controllerEndpoints]) => (
-                    <Collapsible
-                      key={controller}
-                      open={expandedControllers[controller]}
-                      onOpenChange={() => toggleControllerExpanded(controller)}
-                      className="border rounded-md overflow-hidden shadow-sm"
-                    >
-                      <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                        <div className="flex items-center">
-                          {expandedControllers[controller] ? (
-                            <ChevronDown className="h-5 w-5 mr-2" />
-                          ) : (
-                            <ChevronRight className="h-5 w-5 mr-2" />
-                          )}
-                          <Badge
-                            className={`${getControllerColor(
-                              controller
-                            )} px-3 py-1`}
-                          >
-                            {controller}
-                          </Badge>
-                          <span className="ml-2 text-sm text-gray-500">
-                            {controllerEndpoints.length} endpoints
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="bg-white">
-                            {
-                              controllerEndpoints.filter((e) => e.working)
-                                .length
-                            }{" "}
-                            working
-                          </Badge>
-                          <Badge variant="outline" className="bg-white">
-                            {
-                              controllerEndpoints.filter((e) => !e.working)
-                                .length
-                            }{" "}
-                            not working
-                          </Badge>
-                        </div>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <EndpointsTable
-                          endpoints={controllerEndpoints}
-                          getMethodColor={getMethodColor}
-                          getControllerColor={getControllerColor}
-                          toggleEndpointStatus={toggleEndpointStatus}
-                          openEndpointModal={openEndpointModal}
-                          hideController={true}
-                        />
-                      </CollapsibleContent>
-                    </Collapsible>
-                  )
-                )
+                filteredControllers.map(([controller, controllerEndpoints]) => (
+                  <Collapsible
+                    key={controller}
+                    open={expandedControllers[controller]}
+                    onOpenChange={() => toggleControllerExpanded(controller)}
+                    className="border rounded-md overflow-hidden shadow-sm"
+                  >
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center">
+                        {expandedControllers[controller] ? (
+                          <ChevronDown className="h-5 w-5 mr-2" />
+                        ) : (
+                          <ChevronRight className="h-5 w-5 mr-2" />
+                        )}
+                        <Badge
+                          className={`${getControllerColor(
+                            controller
+                          )} px-3 py-1`}
+                        >
+                          {controller}
+                        </Badge>
+                        <span className="ml-2 text-sm text-gray-500">
+                          {controllerEndpoints.length} endpoints
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline" className="bg-white">
+                          {
+                            controllerEndpoints.filter((e) => e.working)
+                              .length
+                          }{" "}
+                          working
+                        </Badge>
+                        <Badge variant="outline" className="bg-white">
+                          {
+                            controllerEndpoints.filter((e) => !e.working)
+                              .length
+                          }{" "}
+                          not working
+                        </Badge>
+                      </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <EndpointsTable
+                        endpoints={controllerEndpoints}
+                        getMethodColor={getMethodColor}
+                        getControllerColor={getControllerColor}
+                        toggleEndpointStatus={toggleEndpointStatus}
+                        openEndpointModal={openEndpointModal}
+                        hideController={true}
+                      />
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))
               )}
             </div>
           </TabsContent>
