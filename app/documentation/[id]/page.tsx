@@ -28,6 +28,7 @@ import {
   BarChart,
   Shield,
   PlaneTakeoff,
+  Download,
 } from "lucide-react";
 import { EndpointDetailModal } from "@/components/endpoint-detail-modal";
 import {
@@ -422,6 +423,33 @@ export default function Documentation() {
       ? Math.round((workingEndpoints / totalEndpoints) * 100)
       : 0;
 
+  const handleDownloadCSV = () => {
+    // Prepare CSV header in the desired order
+    const header = ["Method", "Path", "Controller", "Note"];
+    // Prepare rows in the same order
+    const rows = endpoints.map((ep) => [
+      `"${ep.method}"`,
+      `"${ep.path}"`,
+      `"${ep.controller}"`,
+      ep.notes ? `"${ep.notes.replace(/"/g, '""')}"` : "",
+    ]);
+    // Combine header and rows
+    const csvContent = [header, ...rows]
+      .map((row) => row.join(","))
+      .join("\r\n");
+
+    // Create a blob and trigger download
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${apiData?.info?.title || "api-endpoints"}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -524,6 +552,15 @@ export default function Documentation() {
                   <PlaneTakeoff className="inline h-4 w-4 mr-1" />
                   {apiData?.components?.securitySchemes?.bearerAuth?.type}
                 </Badge>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1"
+                  onClick={handleDownloadCSV}
+                >
+                  <Download className="h-4 w-4" />
+                  Download CSV
+                </Button>
               </div>
             </div>
 
@@ -656,17 +693,11 @@ export default function Documentation() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Badge variant="outline" className="bg-white">
-                          {
-                            controllerEndpoints.filter((e) => e.working)
-                              .length
-                          }{" "}
+                          {controllerEndpoints.filter((e) => e.working).length}{" "}
                           working
                         </Badge>
                         <Badge variant="outline" className="bg-white">
-                          {
-                            controllerEndpoints.filter((e) => !e.working)
-                              .length
-                          }{" "}
+                          {controllerEndpoints.filter((e) => !e.working).length}{" "}
                           not working
                         </Badge>
                       </div>

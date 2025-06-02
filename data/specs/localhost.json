@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://44.203.171.232:8080",
+      "url": "http://localhost:8080",
       "description": "Generated server url"
     }
   ],
