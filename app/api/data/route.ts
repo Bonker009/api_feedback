@@ -32,7 +32,7 @@ async function ensureDirectories() {
     return false;
   }
 }
- 
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const type = searchParams.get("type");
@@ -46,8 +46,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    await ensureDirectories();
-
     let filePath: string;
 
     switch (type) {
@@ -74,7 +72,7 @@ export async function GET(request: NextRequest) {
           { status: 404 }
         );
       }
- 
+
       return NextResponse.json({});
     }
 
@@ -100,8 +98,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    await ensureDirectories();
 
     let filePath: string;
 
@@ -144,8 +140,6 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    await ensureDirectories();
-
     let filePath: string;
 
     switch (type) {
