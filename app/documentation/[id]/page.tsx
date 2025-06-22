@@ -453,8 +453,12 @@ export default function Documentation() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header title="Loading API Documentation" showBackButton={true} />
-        <main className="container mx-auto py-8 px-4">
+        <div className="flex flex-col">
+          <div className="flex-1 p-6 pt-16">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-900">Loading API Documentation</h1>
+            </div>
+            <div className="container mx-auto">
           <Card className="mb-6">
             <CardHeader>
               <Skeleton className="h-8 w-64 mb-2" />
