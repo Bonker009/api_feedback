@@ -160,7 +160,98 @@ export default function ApiAutoTestPage() {
         localStorage.removeItem("api-auth-tokens");
       }
     }
+
+    // Load available API specs
+    loadApiSpecs();
   }, []);
+
+  // Load API specs from data service
+  const loadApiSpecs = async () => {
+    try {
+      const specs = await listSpecs();
+      setApiSpecs(specs);
+    } catch (error) {
+      console.error("Failed to load API specs:", error);
+      toast.error("Failed to load API specifications");
+    }
+  };
+
+  // Load selected API spec data
+  useEffect(() => {
+    if (selectedSpecId) {
+      loadSpecData(selectedSpecId);
+    } else {
+      setApiSpecData(null);
+      setEndpointGroups([]);
+    }
+  }, [selectedSpecId]);
+
+  const loadSpecData = async (specId: string) => {
+    setLoadingSpec(true);
+    try {
+      const specData = await fetchData("spec", specId);
+      if (specData) {
+        setApiSpecData(specData);
+        parseEndpoints(specData);
+
+        // Auto-set base URL from spec servers
+        if (specData.servers && specData.servers.length > 0) {
+          setApiBaseUrl(specData.servers[0].url);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load spec data:", error);
+      toast.error("Failed to load API specification data");
+    } finally {
+      setLoadingSpec(false);
+    }
+  };
+
+  // Parse endpoints from OpenAPI spec
+  const parseEndpoints = (specData: any) => {
+    if (!specData.paths) return;
+
+    const endpoints: ApiEndpoint[] = [];
+
+    Object.entries(specData.paths).forEach(([path, methods]: [string, any]) => {
+      Object.entries(methods).forEach(([method, operation]: [string, any]) => {
+        endpoints.push({
+          path,
+          method: method.toUpperCase(),
+          operationId: operation.operationId,
+          summary: operation.summary,
+          description: operation.description,
+          parameters: operation.parameters,
+          requestBody: operation.requestBody,
+          responses: operation.responses,
+          tags: operation.tags || ["default"],
+        });
+      });
+    });
+
+    // Group endpoints by tags
+    const groups: EndpointGroup[] = [];
+    const tagMap = new Map<string, ApiEndpoint[]>();
+
+    endpoints.forEach((endpoint) => {
+      endpoint.tags?.forEach((tag) => {
+        if (!tagMap.has(tag)) {
+          tagMap.set(tag, []);
+        }
+        tagMap.get(tag)?.push(endpoint);
+      });
+    });
+
+    tagMap.forEach((endpoints, tag) => {
+      groups.push({ tag, endpoints });
+    });
+
+    setEndpointGroups(groups);
+    // Auto-expand first group
+    if (groups.length > 0) {
+      setExpandedGroups(new Set([groups[0].tag]));
+    }
+  };
 
   // Save tokens to localStorage
   const saveTokens = (tokens: AuthToken[]) => {
