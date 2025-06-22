@@ -1,4 +1,17 @@
-import { Calendar, Database, Home, Inbox, Search, Settings } from "lucide-react";
+"use client";
+
+import {
+  Calendar,
+  GraduationCap,
+  Upload,
+  FileText,
+  Search,
+  Settings,
+  TestTube,
+  BarChart,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -14,19 +27,29 @@ import {
 // Menu items.
 const items = [
   {
+    title: "KSHRD Center",
+    url: "/",
+    icon: GraduationCap,
+  },
+  {
+    title: "Upload API Spec",
+    url: "/upload",
+    icon: Upload,
+  },
+  {
     title: "Documentation",
     url: "/documentation",
-    icon: Home,
+    icon: FileText,
   },
   {
-    title: "Database Schema",
-    url: "/database-schema",
-    icon: Database,
+    title: "Test Endpoints",
+    url: "/documentation/test-endpoints",
+    icon: TestTube,
   },
   {
-    title: "Calendar",
+    title: "Analytics",
     url: "#",
-    icon: Calendar,
+    icon: BarChart,
   },
   {
     title: "Search",
@@ -41,20 +64,29 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
+  const isActive = (url: string) => {
+    if (url === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(url);
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Poseidon API Platform</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

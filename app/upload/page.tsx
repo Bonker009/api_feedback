@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Header } from "@/components/header";
+
 import { saveData } from "@/lib/data-service";
 import { toast } from "sonner";
 import { fetchApiSpecFromUrl } from "@/lib/fetch-document/document-service";
@@ -122,116 +122,116 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header
-        title="Upload OpenAPI Specification"
-        description="Upload or fetch your API specification"
-        showBackButton={true}
-      />
+      <div className="flex flex-col">
+        <div className="flex-1 p-6">
+          <div className="container mx-auto">
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Fetch from API</CardTitle>
+                <CardDescription>
+                  Fetch OpenAPI specification directly from your API
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="spec-name">Specification Name</Label>
+                    <Input
+                      id="spec-name"
+                      value={specName}
+                      onChange={(e) => setSpecName(e.target.value)}
+                      placeholder="Enter a name for this specification"
+                      className="mb-4"
+                    />
+                  </div>
 
-      <main className="container mx-auto py-8 px-4">
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Fetch from API</CardTitle>
-            <CardDescription>
-              Fetch OpenAPI specification directly from your API
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="spec-name">Specification Name</Label>
-                <Input
-                  id="spec-name"
-                  value={specName}
-                  onChange={(e) => setSpecName(e.target.value)}
-                  placeholder="Enter a name for this specification"
-                  className="mb-4"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-2">
-                <div className="flex-1">
-                  <Label htmlFor="api-url">API Documentation URL</Label>
-                  <Input
-                    id="api-url"
-                    value={apiUrl}
-                    onChange={(e) => setApiUrl(e.target.value)}
-                    placeholder="http://localhost:8080/v3/api-docs"
-                  />
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="flex-1">
+                      <Label htmlFor="api-url">API Documentation URL</Label>
+                      <Input
+                        id="api-url"
+                        value={apiUrl}
+                        onChange={(e) => setApiUrl(e.target.value)}
+                        placeholder="http://localhost:8080/v3/api-docs"
+                      />
+                    </div>
+                    <div className="flex items-end">
+                      <Button
+                        onClick={fetchApiSpec}
+                        disabled={isLoading}
+                        className="bg-red-400 hover:bg-red-300"
+                      >
+                        {isLoading ? "Fetching..." : "Fetch"}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-end">
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Upload Specification</CardTitle>
+                <CardDescription>
+                  Upload your OpenAPI specification file in JSON format
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className={`border-2 border-dashed rounded-lg p-10 text-center mb-6 ${
+                    isDragging
+                      ? "border-primary bg-primary/10"
+                      : "border-gray-300"
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-600">
+                    Drag and drop your OpenAPI specification file here, or click
+                    to browse
+                  </p>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <label htmlFor="file-upload">
+                    <Button className="mt-4" asChild>
+                      Browse Files
+                    </Button>
+                  </label>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Or paste your OpenAPI specification here:
+                    </label>
+                    <Textarea
+                      value={apiSpec}
+                      onChange={(e) => setApiSpec(e.target.value)}
+                      placeholder="Paste your OpenAPI JSON here..."
+                      className="font-mono h-64"
+                    />
+                  </div>
+
                   <Button
-                    onClick={fetchApiSpec}
-                    disabled={isLoading}
-                    className="bg-red-400 hover:bg-red-300"
+                    onClick={handleSubmit}
+                    className="w-full bg-red-400 hover:bg-red-300"
+                    disabled={isSaving}
                   >
-                    {isLoading ? "Fetching..." : "Fetch"}
+                    {isSaving ? "Saving..." : "Upload and Process"}
                   </Button>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Upload Specification</CardTitle>
-            <CardDescription>
-              Upload your OpenAPI specification file in JSON format
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div
-              className={`border-2 border-dashed rounded-lg p-10 text-center mb-6 ${
-                isDragging ? "border-primary bg-primary/10" : "border-gray-300"
-              }`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <Upload className="mx-auto h-12 w-12 text-gray-400" />
-              <p className="mt-2 text-sm text-gray-600">
-                Drag and drop your OpenAPI specification file here, or click to
-                browse
-              </p>
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleFileChange}
-                className="hidden"
-                id="file-upload"
-              />
-              <label htmlFor="file-upload">
-                <Button className="mt-4" asChild>
-                  Browse Files
-                </Button>
-              </label>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Or paste your OpenAPI specification here:
-                </label>
-                <Textarea
-                  value={apiSpec}
-                  onChange={(e) => setApiSpec(e.target.value)}
-                  placeholder="Paste your OpenAPI JSON here..."
-                  className="font-mono h-64"
-                />
-              </div>
-
-              <Button
-                onClick={handleSubmit}
-                className="w-full bg-red-400 hover:bg-red-300"
-                disabled={isSaving}
-              >
-                {isSaving ? "Saving..." : "Upload and Process"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </main>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
