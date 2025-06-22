@@ -1102,7 +1102,7 @@ export default function ApiAutoTestPage() {
 
                 {/* Quick Actions */}
                 <Card>
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-3 h-auto flex-grow-0">
                     <CardTitle className="text-lg">Quick Actions</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
