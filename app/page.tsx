@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Header } from "@/components/header";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { listSpecs, deleteSpec } from "@/lib/data-service";
 import { FileText, Plus, Upload, BarChart } from "lucide-react";
