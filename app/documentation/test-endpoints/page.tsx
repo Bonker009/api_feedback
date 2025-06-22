@@ -125,6 +125,17 @@ export default function ApiAutoTestPage() {
   const [loading, setLoading] = useState(false);
   const [runningTestIndex, setRunningTestIndex] = useState<number | null>(null);
 
+  // API Spec and endpoint selection state
+  const [apiSpecs, setApiSpecs] = useState<ApiSpec[]>([]);
+  const [selectedSpecId, setSelectedSpecId] = useState<string>("");
+  const [apiSpecData, setApiSpecData] = useState<any>(null);
+  const [endpointGroups, setEndpointGroups] = useState<EndpointGroup[]>([]);
+  const [selectedEndpoints, setSelectedEndpoints] = useState<Set<string>>(
+    new Set(),
+  );
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [loadingSpec, setLoadingSpec] = useState(false);
+
   // Dialog states
   const [tokenDialogOpen, setTokenDialogOpen] = useState(false);
   const [editingToken, setEditingToken] = useState<AuthToken | null>(null);
