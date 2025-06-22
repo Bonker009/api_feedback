@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Use stable Turbopack configuration
-  turbopack: {
-    resolveExtensions: [".tsx", ".ts", ".jsx", ".js"],
-  },
+  /* config options here */
 };
 
 export default nextConfig;
