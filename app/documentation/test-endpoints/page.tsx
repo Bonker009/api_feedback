@@ -90,6 +90,30 @@ interface TestResult {
   error?: string;
 }
 
+interface ApiSpec {
+  id: string;
+  title: string;
+  version: string;
+  lastModified: string;
+}
+
+interface ApiEndpoint {
+  path: string;
+  method: string;
+  operationId?: string;
+  summary?: string;
+  description?: string;
+  parameters?: any[];
+  requestBody?: any;
+  responses?: any;
+  tags?: string[];
+}
+
+interface EndpointGroup {
+  tag: string;
+  endpoints: ApiEndpoint[];
+}
+
 export default function ApiAutoTestPage() {
   // State management
   const [authTokens, setAuthTokens] = useState<AuthToken[]>([]);
