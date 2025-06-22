@@ -70,8 +70,9 @@ export function PageHeader() {
 
   if (!config) {
     config = {
-      title: "Poseidon",
-      description: "API Documentation & Testing Platform",
+      title: "KSHRD Center",
+      description:
+        "Korea Software HRD Center - Empowering Digital Innovation in Cambodia",
     };
   }
 
