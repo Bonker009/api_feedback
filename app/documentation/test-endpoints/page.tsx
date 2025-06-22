@@ -703,7 +703,7 @@ export default function ApiAutoTestPage() {
               <div className="lg:col-span-1 space-y-6">
                 {/* Authorization Token Management */}
                 <Card className="border-2 border-blue-100">
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-0">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Key className="h-5 w-5 text-blue-600" />
