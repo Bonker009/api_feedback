@@ -911,7 +911,7 @@ export default function ApiAutoTestPage() {
                         value={selectedSpecId}
                         onValueChange={setSelectedSpecId}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full mt-2">
                           <SelectValue placeholder="Choose an API specification" />
                         </SelectTrigger>
                         <SelectContent>
