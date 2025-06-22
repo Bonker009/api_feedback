@@ -1,6 +1,5 @@
 import {
   Calendar,
-  Database,
   Home,
   Upload,
   FileText,
@@ -43,11 +42,6 @@ const items = [
     title: "Test Endpoints",
     url: "/documentation/test-endpoints",
     icon: TestTube,
-  },
-  {
-    title: "Database Schema",
-    url: "/database-schema",
-    icon: Database,
   },
   {
     title: "Analytics",
