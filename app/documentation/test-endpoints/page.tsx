@@ -1068,7 +1068,7 @@ export default function ApiAutoTestPage() {
 
                 {/* API Configuration */}
                 <Card>
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-0">
                     <CardTitle className="text-lg">API Configuration</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
