@@ -52,6 +52,12 @@ import {
   Download,
   Upload,
   RefreshCw,
+  ChevronDown,
+  ChevronRight,
+  FileText,
+  Code,
+  Server,
+  Globe,
 } from "lucide-react";
 import { toast } from "sonner";
 
