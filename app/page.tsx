@@ -213,6 +213,373 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* KSHRD Achievements & Programs */}
+            <div className="mb-12">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  KSHRD Center Achievements & Programs
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Over a decade of excellence in technology education and
+                  digital transformation in Cambodia.
+                </p>
+              </div>
+
+              {/* Achievement Timeline */}
+              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-yellow-100 rounded-lg">
+                      <Award className="h-6 w-6 text-yellow-600" />
+                    </div>
+                    <CardTitle className="text-xl">
+                      Major Achievements & Milestones
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div className="flex gap-4">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">
+                            2013 - Foundation
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Established as Korea Software HRD Center in
+                            collaboration with Korean government and industry
+                            partners.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="w-2 h-2 bg-green-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">
+                            2016 - First Graduation
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            First cohort of 30 students graduated with 95%
+                            employment rate in top tech companies.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">
+                            2019 - Regional Recognition
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Recognized as "Best IT Training Center" by ASEAN
+                            Digital Innovation Awards.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">
+                            2021 - 500+ Graduates
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Reached milestone of 500+ skilled developers
+                            contributing to Cambodia's digital economy.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <img
+                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500&h=300&fit=crop&crop=center"
+                        alt="KSHRD Center classroom with students learning programming"
+                        className="w-full h-64 object-cover rounded-lg shadow-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
+                      <div className="absolute bottom-4 left-4 text-white">
+                        <p className="text-sm font-medium">
+                          Modern Learning Environment
+                        </p>
+                        <p className="text-xs opacity-90">
+                          State-of-the-art facilities for hands-on learning
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Training Programs */}
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <div className="relative mb-4">
+                      <img
+                        src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=200&fit=crop&crop=center"
+                        alt="Web Development Course"
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <div className="absolute top-2 right-2">
+                        <Badge className="bg-blue-100 text-blue-800">
+                          6 Months
+                        </Badge>
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">Web Development</h3>
+                    <p className="text-gray-600 text-sm mb-3">
+                      Full-stack web development using modern frameworks like
+                      React, Node.js, and MongoDB.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        120+ Graduates
+                      </span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star
+                            key={i}
+                            className="h-3 w-3 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <div className="relative mb-4">
+                      <img
+                        src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=200&fit=crop&crop=center"
+                        alt="Mobile Development Course"
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <div className="absolute top-2 right-2">
+                        <Badge className="bg-green-100 text-green-800">
+                          8 Months
+                        </Badge>
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">
+                      Mobile Development
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-3">
+                      iOS and Android app development using Swift, Kotlin, and
+                      cross-platform frameworks.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        90+ Graduates
+                      </span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star
+                            key={i}
+                            className="h-3 w-3 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <div className="relative mb-4">
+                      <img
+                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop&crop=center"
+                        alt="Data Science Course"
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <div className="absolute top-2 right-2">
+                        <Badge className="bg-purple-100 text-purple-800">
+                          10 Months
+                        </Badge>
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">
+                      Data Science & AI
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-3">
+                      Machine learning, data analysis, and AI development using
+                      Python and advanced algorithms.
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        75+ Graduates
+                      </span>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star
+                            key={i}
+                            className="h-3 w-3 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Success Stories */}
+              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <Users className="h-6 w-6 text-green-600" />
+                    </div>
+                    <CardTitle className="text-xl">Success Stories</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <img
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                        alt="Sophea Chea - Software Engineer at Google"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                      />
+                      <h4 className="font-semibold">Sophea Chea</h4>
+                      <p className="text-sm text-blue-600 mb-2">
+                        Software Engineer @ Google
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        "KSHRD transformed my career. From a fresh graduate to
+                        working at Google in just 2 years."
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <img
+                        src="https://images.unsplash.com/photo-1494790108755-2616b612b372?w=150&h=150&fit=crop&crop=face"
+                        alt="Dara Lim - Tech Startup Founder"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                      />
+                      <h4 className="font-semibold">Dara Lim</h4>
+                      <p className="text-sm text-green-600 mb-2">
+                        Founder @ TechCambo
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        "The entrepreneurship program helped me launch a
+                        successful fintech startup serving 10K+ users."
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <img
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                        alt="Pisach Vong - Senior Developer at Samsung"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 object-cover"
+                      />
+                      <h4 className="font-semibold">Pisach Vong</h4>
+                      <p className="text-sm text-purple-600 mb-2">
+                        Senior Dev @ Samsung
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        "The hands-on approach and real-world projects prepared
+                        me for challenges in the tech industry."
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Industry Partnerships */}
+              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Globe className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <CardTitle className="text-xl">
+                      Industry Partnerships
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="font-semibold mb-4">
+                        Global Technology Partners
+                      </h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
+                            MS
+                          </div>
+                          <span className="text-sm font-medium">Microsoft</span>
+                        </div>
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-8 h-8 bg-red-500 rounded flex items-center justify-center text-white text-xs font-bold">
+                            G
+                          </div>
+                          <span className="text-sm font-medium">Google</span>
+                        </div>
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center text-white text-xs font-bold">
+                            A
+                          </div>
+                          <span className="text-sm font-medium">Amazon</span>
+                        </div>
+                        <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center text-white text-xs font-bold">
+                            S
+                          </div>
+                          <span className="text-sm font-medium">Samsung</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <img
+                        src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=500&h=300&fit=crop&crop=center"
+                        alt="KSHRD Center partnership signing ceremony"
+                        className="w-full h-48 object-cover rounded-lg shadow-lg"
+                      />
+                      <p className="text-sm text-gray-600 mt-2 text-center">
+                        Partnership signing ceremony with international tech
+                        companies
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Impact Statistics */}
+              <Card className="border-0 shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <CardContent className="p-8">
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold mb-2">
+                      Our Impact in Numbers
+                    </h3>
+                    <p className="opacity-90">
+                      Transforming lives and building Cambodia's digital future
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold mb-1">500+</div>
+                      <div className="text-sm opacity-90">Graduates</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold mb-1">98%</div>
+                      <div className="text-sm opacity-90">Employment Rate</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold mb-1">25+</div>
+                      <div className="text-sm opacity-90">
+                        Partner Companies
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold mb-1">$2.5M</div>
+                      <div className="text-sm opacity-90">
+                        Avg Graduate Salary
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* Poseidon Platform Section */}
