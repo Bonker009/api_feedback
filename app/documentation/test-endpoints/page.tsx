@@ -1079,6 +1079,7 @@ export default function ApiAutoTestPage() {
                         value={apiBaseUrl}
                         onChange={(e) => setApiBaseUrl(e.target.value)}
                         placeholder="https://api.example.com"
+                        className="mt-2"
                       />
                     </div>
 
