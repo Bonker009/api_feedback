@@ -76,12 +76,12 @@ export default function Documentation() {
   const [apiData, setApiData] = useState<any>(null);
 
   const [endpointStatuses, setEndpointStatuses] = useState<EndpointStatus[]>(
-    []
+    [],
   );
   const [endpoints, setEndpoints] = useState<EndpointData[]>([]);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedEndpoint, setSelectedEndpoint] = useState<EndpointData | null>(
-    null
+    null,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedControllers, setExpandedControllers] = useState<
@@ -138,7 +138,7 @@ export default function Documentation() {
               data.tags && data.tags.length > 0 ? data.tags[0] : "unknown";
             const status = endpointStatuses.find(
               (status) =>
-                status.path === path && status.method === method.toLowerCase()
+                status.path === path && status.method === method.toLowerCase(),
             );
 
             extractedEndpoints.push({
@@ -150,7 +150,7 @@ export default function Documentation() {
               notes: status?.notes || "",
             });
           });
-        }
+        },
       );
 
       setEndpoints(extractedEndpoints);
@@ -222,7 +222,7 @@ export default function Documentation() {
     if (!controllerSearch) return controllers;
 
     return controllers.filter(([controller]) =>
-      controller.toLowerCase().includes(controllerSearch.toLowerCase())
+      controller.toLowerCase().includes(controllerSearch.toLowerCase()),
     );
   }, [endpointsByController, controllerSearch]);
 
@@ -231,7 +231,7 @@ export default function Documentation() {
       const methodLower = method.toLowerCase();
 
       const existingStatusIndex = endpointStatuses.findIndex(
-        (status) => status.path === path && status.method === methodLower
+        (status) => status.path === path && status.method === methodLower,
       );
 
       let updatedStatuses;
@@ -266,7 +266,7 @@ export default function Documentation() {
             };
           }
           return endpoint;
-        })
+        }),
       );
 
       if (
@@ -290,13 +290,13 @@ export default function Documentation() {
   const updateEndpointNotes = async (
     path: string,
     method: string,
-    notes: string
+    notes: string,
   ) => {
     try {
       const methodLower = method.toLowerCase();
 
       const existingStatusIndex = endpointStatuses.findIndex(
-        (status) => status.path === path && status.method === methodLower
+        (status) => status.path === path && status.method === methodLower,
       );
 
       let updatedStatuses;
@@ -331,7 +331,7 @@ export default function Documentation() {
             };
           }
           return endpoint;
-        })
+        }),
       );
 
       if (
@@ -394,7 +394,8 @@ export default function Documentation() {
 
   const getEndpointStatus = (path: string, method: string) => {
     const status = endpointStatuses.find(
-      (status) => status.path === path && status.method === method.toLowerCase()
+      (status) =>
+        status.path === path && status.method === method.toLowerCase(),
     );
     return {
       working: status?.working || false,
@@ -456,38 +457,40 @@ export default function Documentation() {
         <div className="flex flex-col">
           <div className="flex-1 p-6 pt-16">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Loading API Documentation</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Loading API Documentation
+              </h1>
             </div>
             <div className="container mx-auto">
-          <Card className="mb-6">
-            <CardHeader>
-              <Skeleton className="h-8 w-64 mb-2" />
-              <Skeleton className="h-4 w-48" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Skeleton className="h-6 w-full" />
-                <Skeleton className="h-6 w-3/4" />
-              </div>
-            </CardContent>
-          </Card>
+              <Card className="mb-6">
+                <CardHeader>
+                  <Skeleton className="h-8 w-64 mb-2" />
+                  <Skeleton className="h-4 w-48" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                  </div>
+                </CardContent>
+              </Card>
 
-          <Skeleton className="h-10 w-full mb-6" />
+              <Skeleton className="h-10 w-full mb-6" />
 
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-32 mb-2" />
-              <Skeleton className="h-4 w-24" />
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-              </div>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader>
+                  <Skeleton className="h-6 w-32 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -501,22 +504,24 @@ export default function Documentation() {
         <div className="flex flex-col">
           <div className="flex-1 p-6 pt-16">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-red-600">API Documentation Error</h1>
+              <h1 className="text-3xl font-bold text-red-600">
+                API Documentation Error
+              </h1>
             </div>
             <div className="container mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-red-600">
-                Error Loading Documentation
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{error}</p>
-              <Button onClick={() => (window.location.href = "/")}>
-                Return to Home
-              </Button>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-red-600">
+                    Error Loading Documentation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4">{error}</p>
+                  <Button onClick={() => (window.location.href = "/")}>
+                    Return to Home
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -529,227 +534,241 @@ export default function Documentation() {
       <div className="flex flex-col">
         <div className="flex-1 p-6 pt-16">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">{apiData?.info?.title || "API Documentation"}</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {apiData?.info?.title || "API Documentation"}
+            </h1>
           </div>
           <div className="container mx-auto">
-        <Card className="mb-6">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg">
-                  {apiData?.info?.title || "API Documentation"}
-                </CardTitle>
-                <CardDescription className="text-sm text-slate-500">
-                  Version: {apiData?.info?.version || "N/A"}
-                </CardDescription>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
-                  {totalEndpoints} Endpoints
-                </Badge>
-                <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
-                  {workingEndpoints} Working
-                </Badge>
-                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
-                  {implementationRate}% Implementation Rate
-                </Badge>
-                <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
-                  <BarChart className="inline h-4 w-4 mr-1" />
-                  Penh Seyha
-                </Badge>
-                <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
-                  <Shield className="inline h-4 w-4 mr-1" />
-                  {apiData?.components?.securitySchemes?.bearerAuth?.scheme}
-                </Badge>
-                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
-                  <PlaneTakeoff className="inline h-4 w-4 mr-1" />
-                  {apiData?.components?.securitySchemes?.bearerAuth?.type}
-                </Badge>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-1"
-                  onClick={handleDownloadCSV}
-                >
-                  <Download className="h-4 w-4" />
-                  Download CSV
-                </Button>
-              </div>
-            </div>
-
-            <CardDescription className="text-sm text-slate-700 ">
-              {apiData?.info?.description || "No description available"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <h3 className="text-lg font-medium mb-2">Servers:</h3>
-              <ul className="space-y-1">
-                {apiData?.servers?.map((server: any, index: number) => (
-                  <li key={index} className="text-sm">
-                    {server.url} - {server.description}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Tabs
-          defaultValue="all"
-          className="mb-6 w-full"
-          onValueChange={setActiveTab}
-        >
-          <TabsList className="w-full">
-            <TabsTrigger value="all" className="flex-1">
-              All Endpoints
-            </TabsTrigger>
-            <TabsTrigger value="working" className="flex-1">
-              Working
-            </TabsTrigger>
-            <TabsTrigger value="not-working" className="flex-1">
-              Not Working
-            </TabsTrigger>
-            <TabsTrigger value="by-controller" className="flex-1">
-              By Controller
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="mt-6 w-full">
-            <EndpointsTable
-              endpoints={filteredEndpoints()}
-              getMethodColor={getMethodColor}
-              getControllerColor={getControllerColor}
-              toggleEndpointStatus={toggleEndpointStatus}
-              openEndpointModal={openEndpointModal}
-            />
-          </TabsContent>
-
-          <TabsContent value="working" className="mt-6">
-            <EndpointsTable
-              endpoints={filteredEndpoints()}
-              getMethodColor={getMethodColor}
-              getControllerColor={getControllerColor}
-              toggleEndpointStatus={toggleEndpointStatus}
-              openEndpointModal={openEndpointModal}
-            />
-          </TabsContent>
-
-          <TabsContent value="not-working" className="mt-6">
-            <EndpointsTable
-              endpoints={filteredEndpoints()}
-              getMethodColor={getMethodColor}
-              getControllerColor={getControllerColor}
-              toggleEndpointStatus={toggleEndpointStatus}
-              openEndpointModal={openEndpointModal}
-            />
-          </TabsContent>
-
-          <TabsContent value="by-controller" className="mt-6">
-            <div className="space-y-6">
-              {/* Add search input */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search controllers..."
-                  value={controllerSearch}
-                  onChange={(e) => setControllerSearch(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute right-3 top-2.5 text-gray-400">
-                  {controllerSearch && (
-                    <button
-                      onClick={() => setControllerSearch("")}
-                      className="hover:text-gray-600"
+            <Card className="mb-6">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-lg">
+                      {apiData?.info?.title || "API Documentation"}
+                    </CardTitle>
+                    <CardDescription className="text-sm text-slate-500">
+                      Version: {apiData?.info?.version || "N/A"}
+                    </CardDescription>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
+                      {totalEndpoints} Endpoints
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
+                      {workingEndpoints} Working
+                    </Badge>
+                    <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
+                      {implementationRate}% Implementation Rate
+                    </Badge>
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200 px-3 py-1">
+                      <BarChart className="inline h-4 w-4 mr-1" />
+                      Penh Seyha
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-800 border-green-200 px-3 py-1">
+                      <Shield className="inline h-4 w-4 mr-1" />
+                      {apiData?.components?.securitySchemes?.bearerAuth?.scheme}
+                    </Badge>
+                    <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 px-3 py-1">
+                      <PlaneTakeoff className="inline h-4 w-4 mr-1" />
+                      {apiData?.components?.securitySchemes?.bearerAuth?.type}
+                    </Badge>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-1"
+                      onClick={handleDownloadCSV}
                     >
-                      ×
-                    </button>
+                      <Download className="h-4 w-4" />
+                      Download CSV
+                    </Button>
+                  </div>
+                </div>
+
+                <CardDescription className="text-sm text-slate-700 ">
+                  {apiData?.info?.description || "No description available"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <h3 className="text-lg font-medium mb-2">Servers:</h3>
+                  <ul className="space-y-1">
+                    {apiData?.servers?.map((server: any, index: number) => (
+                      <li key={index} className="text-sm">
+                        {server.url} - {server.description}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Tabs
+              defaultValue="all"
+              className="mb-6 w-full"
+              onValueChange={setActiveTab}
+            >
+              <TabsList className="w-full">
+                <TabsTrigger value="all" className="flex-1">
+                  All Endpoints
+                </TabsTrigger>
+                <TabsTrigger value="working" className="flex-1">
+                  Working
+                </TabsTrigger>
+                <TabsTrigger value="not-working" className="flex-1">
+                  Not Working
+                </TabsTrigger>
+                <TabsTrigger value="by-controller" className="flex-1">
+                  By Controller
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="all" className="mt-6 w-full">
+                <EndpointsTable
+                  endpoints={filteredEndpoints()}
+                  getMethodColor={getMethodColor}
+                  getControllerColor={getControllerColor}
+                  toggleEndpointStatus={toggleEndpointStatus}
+                  openEndpointModal={openEndpointModal}
+                />
+              </TabsContent>
+
+              <TabsContent value="working" className="mt-6">
+                <EndpointsTable
+                  endpoints={filteredEndpoints()}
+                  getMethodColor={getMethodColor}
+                  getControllerColor={getControllerColor}
+                  toggleEndpointStatus={toggleEndpointStatus}
+                  openEndpointModal={openEndpointModal}
+                />
+              </TabsContent>
+
+              <TabsContent value="not-working" className="mt-6">
+                <EndpointsTable
+                  endpoints={filteredEndpoints()}
+                  getMethodColor={getMethodColor}
+                  getControllerColor={getControllerColor}
+                  toggleEndpointStatus={toggleEndpointStatus}
+                  openEndpointModal={openEndpointModal}
+                />
+              </TabsContent>
+
+              <TabsContent value="by-controller" className="mt-6">
+                <div className="space-y-6">
+                  {/* Add search input */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search controllers..."
+                      value={controllerSearch}
+                      onChange={(e) => setControllerSearch(e.target.value)}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <div className="absolute right-3 top-2.5 text-gray-400">
+                      {controllerSearch && (
+                        <button
+                          onClick={() => setControllerSearch("")}
+                          className="hover:text-gray-600"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {filteredControllers.length === 0 ? (
+                    <Card>
+                      <CardContent className="py-8">
+                        <p className="text-center text-gray-500">
+                          {controllerSearch
+                            ? `No controllers matching "${controllerSearch}"`
+                            : "No endpoints found"}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    filteredControllers.map(
+                      ([controller, controllerEndpoints]) => (
+                        <Collapsible
+                          key={controller}
+                          open={expandedControllers[controller]}
+                          onOpenChange={() =>
+                            toggleControllerExpanded(controller)
+                          }
+                          className="border rounded-md overflow-hidden shadow-sm"
+                        >
+                          <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <div className="flex items-center">
+                              {expandedControllers[controller] ? (
+                                <ChevronDown className="h-5 w-5 mr-2" />
+                              ) : (
+                                <ChevronRight className="h-5 w-5 mr-2" />
+                              )}
+                              <Badge
+                                className={`${getControllerColor(
+                                  controller,
+                                )} px-3 py-1`}
+                              >
+                                {controller}
+                              </Badge>
+                              <span className="ml-2 text-sm text-gray-500">
+                                {controllerEndpoints.length} endpoints
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Badge variant="outline" className="bg-white">
+                                {
+                                  controllerEndpoints.filter((e) => e.working)
+                                    .length
+                                }{" "}
+                                working
+                              </Badge>
+                              <Badge variant="outline" className="bg-white">
+                                {
+                                  controllerEndpoints.filter((e) => !e.working)
+                                    .length
+                                }{" "}
+                                not working
+                              </Badge>
+                            </div>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <EndpointsTable
+                              endpoints={controllerEndpoints}
+                              getMethodColor={getMethodColor}
+                              getControllerColor={getControllerColor}
+                              toggleEndpointStatus={toggleEndpointStatus}
+                              openEndpointModal={openEndpointModal}
+                              hideController={true}
+                            />
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ),
+                    )
                   )}
                 </div>
-              </div>
+              </TabsContent>
+            </Tabs>
 
-              {filteredControllers.length === 0 ? (
-                <Card>
-                  <CardContent className="py-8">
-                    <p className="text-center text-gray-500">
-                      {controllerSearch
-                        ? `No controllers matching "${controllerSearch}"`
-                        : "No endpoints found"}
-                    </p>
-                  </CardContent>
-                </Card>
-              ) : (
-                filteredControllers.map(([controller, controllerEndpoints]) => (
-                  <Collapsible
-                    key={controller}
-                    open={expandedControllers[controller]}
-                    onOpenChange={() => toggleControllerExpanded(controller)}
-                    className="border rounded-md overflow-hidden shadow-sm"
-                  >
-                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <div className="flex items-center">
-                        {expandedControllers[controller] ? (
-                          <ChevronDown className="h-5 w-5 mr-2" />
-                        ) : (
-                          <ChevronRight className="h-5 w-5 mr-2" />
-                        )}
-                        <Badge
-                          className={`${getControllerColor(
-                            controller
-                          )} px-3 py-1`}
-                        >
-                          {controller}
-                        </Badge>
-                        <span className="ml-2 text-sm text-gray-500">
-                          {controllerEndpoints.length} endpoints
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="bg-white">
-                          {controllerEndpoints.filter((e) => e.working).length}{" "}
-                          working
-                        </Badge>
-                        <Badge variant="outline" className="bg-white">
-                          {controllerEndpoints.filter((e) => !e.working).length}{" "}
-                          not working
-                        </Badge>
-                      </div>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <EndpointsTable
-                        endpoints={controllerEndpoints}
-                        getMethodColor={getMethodColor}
-                        getControllerColor={getControllerColor}
-                        toggleEndpointStatus={toggleEndpointStatus}
-                        openEndpointModal={openEndpointModal}
-                        hideController={true}
-                      />
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {selectedEndpoint && (
-          <EndpointDetailModal
-            isOpen={isModalOpen}
-            onClose={closeEndpointModal}
-            endpoint={selectedEndpoint}
-            path={selectedEndpoint.path}
-            method={selectedEndpoint.method}
-            apiData={apiData}
-            status={getEndpointStatus(
-              selectedEndpoint.path,
-              selectedEndpoint.method
+            {selectedEndpoint && (
+              <EndpointDetailModal
+                isOpen={isModalOpen}
+                onClose={closeEndpointModal}
+                endpoint={selectedEndpoint}
+                path={selectedEndpoint.path}
+                method={selectedEndpoint.method}
+                apiData={apiData}
+                status={getEndpointStatus(
+                  selectedEndpoint.path,
+                  selectedEndpoint.method,
+                )}
+                onToggleStatus={toggleEndpointStatus}
+                onUpdateNotes={updateEndpointNotes}
+                getControllerColor={getControllerColor}
+              />
             )}
-            onToggleStatus={toggleEndpointStatus}
-            onUpdateNotes={updateEndpointNotes}
-            getControllerColor={getControllerColor}
-          />
-        )}
-      </main>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -810,7 +829,7 @@ function EndpointsTable({
                     <TableCell>
                       <span
                         className={`inline-block px-2 py-1 rounded text-xs font-bold uppercase ${getMethodColor(
-                          endpoint.method
+                          endpoint.method,
                         )}`}
                       >
                         {endpoint.method}
