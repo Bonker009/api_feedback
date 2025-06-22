@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const pageConfig = {
@@ -24,9 +25,36 @@ const pageConfig = {
 
 export function PageHeader() {
   const pathname = usePathname();
+  const [dynamicTitle, setDynamicTitle] = useState<string | null>(null);
 
   // Handle dynamic documentation routes like /documentation/[id]
   let config = pageConfig[pathname as keyof typeof pageConfig];
+
+  useEffect(() => {
+    // Check if we're on a dynamic documentation page
+    if (
+      pathname.startsWith("/documentation/") &&
+      pathname !== "/documentation/test-endpoints" &&
+      pathname !== "/documentation"
+    ) {
+      const specId = pathname.split("/documentation/")[1];
+
+      // Try to fetch the spec title for dynamic routes
+      fetch(`/api/data?type=spec&id=${specId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.info?.title) {
+            setDynamicTitle(data.info.title);
+          }
+        })
+        .catch(() => {
+          // Fallback to default if fetch fails
+          setDynamicTitle(null);
+        });
+    } else {
+      setDynamicTitle(null);
+    }
+  }, [pathname]);
 
   if (
     !config &&
@@ -34,7 +62,7 @@ export function PageHeader() {
     pathname !== "/documentation/test-endpoints"
   ) {
     config = {
-      title: "API Documentation",
+      title: dynamicTitle || "API Documentation",
       description: "View and manage your API endpoints",
     };
   }
