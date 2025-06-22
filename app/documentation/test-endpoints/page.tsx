@@ -653,6 +653,11 @@ export default function ApiAutoTestPage() {
                       <p className="text-2xl font-bold text-purple-700">
                         {testCases.length}
                       </p>
+                      {selectedEndpoints.size > 0 && (
+                        <p className="text-xs text-purple-500">
+                          {selectedEndpoints.size} endpoints selected
+                        </p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
