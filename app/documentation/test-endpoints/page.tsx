@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,10 +38,7 @@ export default function ApiAutoTestPage() {
     const res: any[] = [];
     for (let i = 0; i < testCases.length; i++) {
       const tc = testCases[i];
-      const result = await runTestCase(
-        tc,
-        apiUrl
-      );
+      const result = await runTestCase(tc, apiUrl);
       res.push(result);
     }
     setResults(res);
@@ -47,41 +50,50 @@ export default function ApiAutoTestPage() {
       <div className="flex flex-col">
         <div className="flex-1 p-6 pt-16">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">API Auto Tester</h1>
-            <p className="text-gray-600 mt-2">Run automated tests for your API endpoints</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              API Auto Tester
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Run automated tests for your API endpoints
+            </p>
           </div>
           <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>API Auto Tester</CardTitle>
-            <CardDescription>
-              Enter your API endpoint, token, and test cases to run automated tests.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="block mb-1 font-medium">API URL</label>
-              <Input
-                value={apiUrl}
-                onChange={e => setApiUrl(e.target.value)}
-                placeholder="https://api.example.com/endpoint"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Bearer Token (optional)</label>
-              <Input
-                value={token}
-                onChange={e => setToken(e.target.value)}
-                placeholder="Paste your token here"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 font-medium">Test Cases (JSON array)</label>
-              <Textarea
-                rows={6}
-                value={testCasesJson}
-                onChange={e => setTestCasesJson(e.target.value)}
-                placeholder={`[
+            <Card>
+              <CardHeader>
+                <CardTitle>API Auto Tester</CardTitle>
+                <CardDescription>
+                  Enter your API endpoint, token, and test cases to run
+                  automated tests.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="block mb-1 font-medium">API URL</label>
+                  <Input
+                    value={apiUrl}
+                    onChange={(e) => setApiUrl(e.target.value)}
+                    placeholder="https://api.example.com/endpoint"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 font-medium">
+                    Bearer Token (optional)
+                  </label>
+                  <Input
+                    value={token}
+                    onChange={(e) => setToken(e.target.value)}
+                    placeholder="Paste your token here"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 font-medium">
+                    Test Cases (JSON array)
+                  </label>
+                  <Textarea
+                    rows={6}
+                    value={testCasesJson}
+                    onChange={(e) => setTestCasesJson(e.target.value)}
+                    placeholder={`[
   {
     "name": "Valid request",
     "description": "Should return 200",
@@ -89,39 +101,51 @@ export default function ApiAutoTestPage() {
     "expectedStatus": 200
   }
 ]`}
-              />
-              <Button size="sm" className="mt-2" onClick={handleParseTestCases}>
-                Parse Test Cases
-              </Button>
-            </div>
-            <Button
-              onClick={handleRunAll}
-              disabled={loading || !apiUrl || testCases.length === 0}
-              className="w-full"
-            >
-              {loading ? "Running..." : "Run All Test Cases"}
-            </Button>
-            {results.length > 0 && (
-              <div className="mt-6 space-y-4">
-                <h3 className="font-semibold text-lg">Results</h3>
-                {results.map((res, idx) => (
-                  <div key={idx} className="border rounded p-3 bg-gray-50">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge>{testCases[idx]?.name || `Test #${idx + 1}`}</Badge>
-                      <span className={res.ok ? "text-green-600" : "text-red-600"}>
-                        {res.status}
-                      </span>
-                    </div>
-                    <pre className="bg-white rounded p-2 text-xs overflow-x-auto">
-                      {JSON.stringify(res.response, null, 2)}
-                    </pre>
+                  />
+                  <Button
+                    size="sm"
+                    className="mt-2"
+                    onClick={handleParseTestCases}
+                  >
+                    Parse Test Cases
+                  </Button>
+                </div>
+                <Button
+                  onClick={handleRunAll}
+                  disabled={loading || !apiUrl || testCases.length === 0}
+                  className="w-full"
+                >
+                  {loading ? "Running..." : "Run All Test Cases"}
+                </Button>
+                {results.length > 0 && (
+                  <div className="mt-6 space-y-4">
+                    <h3 className="font-semibold text-lg">Results</h3>
+                    {results.map((res, idx) => (
+                      <div key={idx} className="border rounded p-3 bg-gray-50">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge>
+                            {testCases[idx]?.name || `Test #${idx + 1}`}
+                          </Badge>
+                          <span
+                            className={
+                              res.ok ? "text-green-600" : "text-red-600"
+                            }
+                          >
+                            {res.status}
+                          </span>
+                        </div>
+                        <pre className="bg-white rounded p-2 text-xs overflow-x-auto">
+                          {JSON.stringify(res.response, null, 2)}
+                        </pre>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
