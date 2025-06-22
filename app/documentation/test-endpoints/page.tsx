@@ -1100,6 +1100,17 @@ export default function ApiAutoTestPage() {
                     <CardTitle className="text-lg">Quick Actions</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
+                    {selectedEndpoints.size > 0 && (
+                      <Button
+                        onClick={generateTestsFromEndpoints}
+                        className="w-full justify-start bg-orange-600 hover:bg-orange-700"
+                        size="sm"
+                      >
+                        <Code className="h-4 w-4 mr-2" />
+                        Generate Tests ({selectedEndpoints.size})
+                      </Button>
+                    )}
+
                     <Button
                       onClick={generateSampleTests}
                       variant="outline"
