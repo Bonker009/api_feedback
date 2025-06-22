@@ -1,6 +1,6 @@
 import {
   Calendar,
-  Home,
+  GraduationCap,
   Upload,
   FileText,
   Search,
@@ -9,6 +9,7 @@ import {
   BarChart,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -24,9 +25,9 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "KSHRD Center",
     url: "/",
-    icon: Home,
+    icon: GraduationCap,
   },
   {
     title: "Upload API Spec",
