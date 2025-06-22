@@ -43,14 +43,14 @@ export default function ApiAutoTestPage() {
   };
 
   return (
-    <>
-      <Header
-        title="API Auto Tester"
-        description="Run automated tests for your API endpoints"
-        showBackButton={true}
-        showHomeButton={true}
-      />
-      <div className="max-w-2xl mx-auto py-10">
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex flex-col">
+        <div className="flex-1 p-6 pt-16">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">API Auto Tester</h1>
+            <p className="text-gray-600 mt-2">Run automated tests for your API endpoints</p>
+          </div>
+          <div className="max-w-2xl mx-auto">
         <Card>
           <CardHeader>
             <CardTitle>API Auto Tester</CardTitle>
