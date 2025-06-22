@@ -497,12 +497,7 @@ export default function Documentation() {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="flex flex-col">
-          <div className="flex-1 p-6 pt-16">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-red-600">
-                API Documentation Error
-              </h1>
-            </div>
+          <div className="flex-1 p-6">
             <div className="container mx-auto">
               <Card>
                 <CardHeader>
