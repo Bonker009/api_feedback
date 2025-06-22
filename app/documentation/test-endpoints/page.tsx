@@ -896,7 +896,7 @@ export default function ApiAutoTestPage() {
 
                 {/* API Specification Selection */}
                 <Card className="border-2 border-purple-100">
-                  <CardHeader className="pb-3">
+                  <CardHeader className="pb-0">
                     <div className="flex items-center gap-2">
                       <FileText className="h-5 w-5 text-purple-600" />
                       <CardTitle className="text-lg">
@@ -904,7 +904,7 @@ export default function ApiAutoTestPage() {
                       </CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="flex flex-col space-y-4">
                     <div>
                       <Label>Select API Spec</Label>
                       <Select
