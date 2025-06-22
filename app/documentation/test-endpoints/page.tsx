@@ -826,7 +826,7 @@ export default function ApiAutoTestPage() {
                             value={selectedTokenId}
                             onValueChange={setSelectedTokenId}
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full mt-2">
                               <SelectValue placeholder="Choose an auth token" />
                             </SelectTrigger>
                             <SelectContent>
