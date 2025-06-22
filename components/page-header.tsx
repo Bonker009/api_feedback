@@ -6,8 +6,9 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const pageConfig = {
   "/": {
-    title: "Poseidon",
-    description: "API Documentation & Testing Platform",
+    title: "KSHRD Center",
+    description:
+      "Korea Software HRD Center - Empowering Digital Innovation in Cambodia",
   },
   "/upload": {
     title: "Upload OpenAPI Specification",
