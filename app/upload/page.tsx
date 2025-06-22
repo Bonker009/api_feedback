@@ -123,16 +123,7 @@ export default function UploadPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex flex-col">
-        <div className="flex-1 p-6 pt-16">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">
-              Upload OpenAPI Specification
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Upload or fetch your API specification
-            </p>
-          </div>
-
+        <div className="flex-1 p-6">
           <div className="container mx-auto">
             <Card className="mb-6">
               <CardHeader>
