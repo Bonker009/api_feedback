@@ -889,6 +889,178 @@ export default function ApiAutoTestPage() {
                   </CardContent>
                 </Card>
 
+                {/* API Specification Selection */}
+                <Card className="border-2 border-purple-100">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-5 w-5 text-purple-600" />
+                      <CardTitle className="text-lg">
+                        API Specification
+                      </CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Select API Spec</Label>
+                      <Select
+                        value={selectedSpecId}
+                        onValueChange={setSelectedSpecId}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose an API specification" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {apiSpecs.map((spec) => (
+                            <SelectItem key={spec.id} value={spec.id}>
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4" />
+                                <div>
+                                  <div className="font-medium">
+                                    {spec.title}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    v{spec.version}
+                                  </div>
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {apiSpecData && (
+                      <div className="p-3 bg-purple-50 border border-purple-200 rounded">
+                        <div className="flex items-center gap-2 text-purple-700">
+                          <Server className="h-4 w-4" />
+                          <span className="text-sm font-medium">
+                            Loaded Spec
+                          </span>
+                        </div>
+                        <p className="text-xs text-purple-600 mt-1">
+                          {apiSpecData.info?.title} -{" "}
+                          {endpointGroups.reduce(
+                            (sum, group) => sum + group.endpoints.length,
+                            0,
+                          )}{" "}
+                          endpoints
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Endpoint Selection */}
+                {endpointGroups.length > 0 && (
+                  <Card className="border-2 border-orange-100">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Code className="h-5 w-5 text-orange-600" />
+                          <CardTitle className="text-lg">
+                            Select Endpoints
+                          </CardTitle>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={selectAllEndpoints}
+                            className="h-7 text-xs"
+                          >
+                            All
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={deselectAllEndpoints}
+                            className="h-7 text-xs"
+                          >
+                            None
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-2 max-h-80 overflow-y-auto">
+                      {endpointGroups.map((group) => (
+                        <Collapsible
+                          key={group.tag}
+                          open={expandedGroups.has(group.tag)}
+                          onOpenChange={() => toggleGroupExpansion(group.tag)}
+                        >
+                          <CollapsibleTrigger className="flex items-center justify-between w-full p-2 bg-gray-50 rounded hover:bg-gray-100">
+                            <div className="flex items-center gap-2">
+                              {expandedGroups.has(group.tag) ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4" />
+                              )}
+                              <Badge variant="outline" className="text-xs">
+                                {group.tag}
+                              </Badge>
+                              <span className="text-sm font-medium">
+                                {group.endpoints.length} endpoints
+                              </span>
+                            </div>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="mt-2 ml-4 space-y-1">
+                            {group.endpoints.map((endpoint) => {
+                              const endpointKey = `${endpoint.method}:${endpoint.path}`;
+                              const isSelected =
+                                selectedEndpoints.has(endpointKey);
+                              return (
+                                <div
+                                  key={endpointKey}
+                                  className="flex items-start gap-2 p-2 border rounded hover:bg-gray-50"
+                                >
+                                  <Checkbox
+                                    checked={isSelected}
+                                    onCheckedChange={() =>
+                                      toggleEndpointSelection(
+                                        endpoint.path,
+                                        endpoint.method,
+                                      )
+                                    }
+                                    className="mt-1"
+                                  />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <Badge
+                                        variant="outline"
+                                        className={`text-xs ${
+                                          endpoint.method === "GET"
+                                            ? "text-blue-600 border-blue-200"
+                                            : endpoint.method === "POST"
+                                              ? "text-green-600 border-green-200"
+                                              : endpoint.method === "PUT"
+                                                ? "text-yellow-600 border-yellow-200"
+                                                : endpoint.method === "DELETE"
+                                                  ? "text-red-600 border-red-200"
+                                                  : "text-gray-600 border-gray-200"
+                                        }`}
+                                      >
+                                        {endpoint.method}
+                                      </Badge>
+                                      <code className="text-xs font-mono text-gray-700">
+                                        {endpoint.path}
+                                      </code>
+                                    </div>
+                                    {endpoint.summary && (
+                                      <p className="text-xs text-gray-600 truncate">
+                                        {endpoint.summary}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* API Configuration */}
                 <Card>
                   <CardHeader className="pb-3">
