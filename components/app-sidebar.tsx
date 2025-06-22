@@ -9,6 +9,7 @@ import {
   TestTube,
   BarChart,
 } from "lucide-react";
+import Link from "next/link";
 
 import {
   Sidebar,
