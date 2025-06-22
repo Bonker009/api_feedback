@@ -1,4 +1,14 @@
-import { Calendar, Database, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  Calendar,
+  Database,
+  Home,
+  Upload,
+  FileText,
+  Search,
+  Settings,
+  TestTube,
+  BarChart,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -14,9 +24,24 @@ import {
 // Menu items.
 const items = [
   {
+    title: "Home",
+    url: "/",
+    icon: Home,
+  },
+  {
+    title: "Upload API Spec",
+    url: "/upload",
+    icon: Upload,
+  },
+  {
     title: "Documentation",
     url: "/documentation",
-    icon: Home,
+    icon: FileText,
+  },
+  {
+    title: "Test Endpoints",
+    url: "/documentation/test-endpoints",
+    icon: TestTube,
   },
   {
     title: "Database Schema",
@@ -24,9 +49,9 @@ const items = [
     icon: Database,
   },
   {
-    title: "Calendar",
+    title: "Analytics",
     url: "#",
-    icon: Calendar,
+    icon: BarChart,
   },
   {
     title: "Search",
