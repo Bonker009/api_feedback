@@ -18,7 +18,9 @@ export default function RootLayout({
         <SidebarProvider>
           <AppSidebar />
           <main className="w-full">
-            <SidebarTrigger className="absolute top-4 left-4 z-50" />
+            <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4">
+              <SidebarTrigger />
+            </div>
             {children}
           </main>
         </SidebarProvider>
