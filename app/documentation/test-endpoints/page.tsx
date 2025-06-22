@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { runTestCase } from "@/components/runTestCase";
-import { Header } from "@/components/header";
 
 export default function ApiAutoTestPage() {
   const [apiUrl, setApiUrl] = useState("");
